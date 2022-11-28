@@ -1,0 +1,18 @@
+{
+  "DeliveryOrder": {
+    "Id": {
+    },
+    "Code": {
+      "CodeEmpty": "Chưa nhập @Code",
+      "CodeOverLength": "Code quá dài"
+    },
+    "Weight": {
+    },
+    "CustomerId": {
+    },
+    "Customer": {
+      "CustomerEmpty": "Chưa chọn @Customer",
+      "CustomerNotExisted": "@Customer không tồn tại"
+    }
+  }
+}

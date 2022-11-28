@@ -1,0 +1,16 @@
+{
+  "SystemConfig": {
+    "Id": {
+    },
+    "Code": {
+      "CodeEmpty": "Chưa nhập @Code",
+      "CodeOverLength": "Code quá dài"
+    },
+    "FreighterQuotientCost": {
+    },
+    "DeliveryRadius": {
+    },
+    "DeliveryServiceDuration": {
+    }
+  }
+}

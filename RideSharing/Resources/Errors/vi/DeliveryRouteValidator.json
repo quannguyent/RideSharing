@@ -1,0 +1,20 @@
+{
+  "DeliveryRoute": {
+    "Id": {
+    },
+    "Path": {
+      "PathEmpty": "Chưa nhập @Path",
+      "PathOverLength": "Path quá dài"
+    },
+    "CityFreighterId": {
+    },
+    "TotalTravelDistance": {
+    },
+    "TotalEmptyRunDistance": {
+    },
+    "CityFreighter": {
+      "CityFreighterEmpty": "Chưa chọn @CityFreighter",
+      "CityFreighterNotExisted": "@CityFreighter không tồn tại"
+    }
+  }
+}

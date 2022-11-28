@@ -1,0 +1,18 @@
+{
+  "CityFreighter": {
+    "Id": {
+    },
+    "Name": {
+      "NameEmpty": "Chưa nhập @Name",
+      "NameOverLength": "Name quá dài"
+    },
+    "Capacity": {
+    },
+    "NodeId": {
+    },
+    "Node": {
+      "NodeEmpty": "Chưa chọn @Node",
+      "NodeNotExisted": "@Node không tồn tại"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "DeliveryTrip": {
+    "Id": {
+    },
+    "Path": {
+      "PathEmpty": "Chưa nhập @Path",
+      "PathOverLength": "Path quá dài"
+    },
+    "CityFreighterId": {
+    },
+    "BusStopId": {
+    },
+    "TravelDistance": {
+    },
+    "BusStop": {
+      "BusStopEmpty": "Chưa chọn @BusStop",
+      "BusStopNotExisted": "@BusStop không tồn tại"
+    },
+    "CityFreighter": {
+      "CityFreighterEmpty": "Chưa chọn @CityFreighter",
+      "CityFreighterNotExisted": "@CityFreighter không tồn tại"
+    }
+  }
+}

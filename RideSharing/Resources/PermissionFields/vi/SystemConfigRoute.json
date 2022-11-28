@@ -1,0 +1,9 @@
+{
+  "SystemConfig": {
+      "Id": "@Id",
+      "Code": "@Code",
+      "FreighterQuotientCost": "@FreighterQuotientCost",
+      "DeliveryRadius": "@DeliveryRadius",
+      "DeliveryServiceDuration": "@DeliveryServiceDuration",
+  }
+}

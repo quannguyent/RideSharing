@@ -1,0 +1,11 @@
+{
+  "DeliveryTrip": {
+      "Id": "@Id",
+      "Path": "@Path",
+      "CityFreighterId": "@CityFreighterId",
+      "BusStopId": "@BusStopId",
+      "TravelDistance": "@TravelDistance",
+      "BusStop": "@BusStop",
+      "CityFreighter": "@CityFreighter",
+  }
+}

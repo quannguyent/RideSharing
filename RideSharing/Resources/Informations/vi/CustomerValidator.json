@@ -1,0 +1,20 @@
+{
+  "Customer": {
+    "Id": {
+    },
+    "Code": {
+      "CodeEmpty": "Chưa nhập @Code",
+      "CodeOverLength": "Code quá dài"
+    },
+    "Name": {
+      "NameEmpty": "Chưa nhập @Name",
+      "NameOverLength": "Name quá dài"
+    },
+    "NodeId": {
+    },
+    "Node": {
+      "NodeEmpty": "Chưa chọn @Node",
+      "NodeNotExisted": "@Node không tồn tại"
+    }
+  }
+}

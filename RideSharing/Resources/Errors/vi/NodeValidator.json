@@ -1,0 +1,14 @@
+{
+  "Node": {
+    "Id": {
+    },
+    "Code": {
+      "CodeEmpty": "Chưa nhập @Code",
+      "CodeOverLength": "Code quá dài"
+    },
+    "Longtitude": {
+    },
+    "Latitude": {
+    }
+  }
+}

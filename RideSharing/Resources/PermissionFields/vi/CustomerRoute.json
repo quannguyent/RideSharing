@@ -1,0 +1,9 @@
+{
+  "Customer": {
+      "Id": "@Id",
+      "Code": "@Code",
+      "Name": "@Name",
+      "NodeId": "@NodeId",
+      "Node": "@Node",
+  }
+}

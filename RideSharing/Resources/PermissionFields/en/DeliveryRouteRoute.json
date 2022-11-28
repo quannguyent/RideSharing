@@ -1,0 +1,10 @@
+{
+  "DeliveryRoute": {
+      "Id": "@Id",
+      "Path": "@Path",
+      "CityFreighterId": "@CityFreighterId",
+      "TotalTravelDistance": "@TotalTravelDistance",
+      "TotalEmptyRunDistance": "@TotalEmptyRunDistance",
+      "CityFreighter": "@CityFreighter",
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "CityFreighter": {
+      "Id": "@Id",
+      "Name": "@Name",
+      "Capacity": "@Capacity",
+      "NodeId": "@NodeId",
+      "Node": "@Node",
+  }
+}

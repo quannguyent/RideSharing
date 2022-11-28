@@ -1,0 +1,9 @@
+{
+  "DeliveryOrder": {
+      "Id": "@Id",
+      "Code": "@Code",
+      "Weight": "@Weight",
+      "CustomerId": "@CustomerId",
+      "Customer": "@Customer",
+  }
+}

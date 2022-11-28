@@ -1,0 +1,8 @@
+{
+  "BusStop": {
+      "Id": "@Id",
+      "Name": "@Name",
+      "NodeId": "@NodeId",
+      "Node": "@Node",
+  }
+}

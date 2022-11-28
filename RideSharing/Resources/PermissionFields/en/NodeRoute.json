@@ -1,0 +1,8 @@
+{
+  "Node": {
+      "Id": "@Id",
+      "Code": "@Code",
+      "Longtitude": "@Longtitude",
+      "Latitude": "@Latitude",
+  }
+}

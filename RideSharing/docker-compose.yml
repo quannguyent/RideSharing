@@ -1,0 +1,4 @@
+version: "3"
+services:
+    rideSharing-backend:
+        image: truesight.asia:8443/rideSharing-backend:latest

@@ -1,0 +1,23 @@
+{
+  "profiles": {
+    "Development": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "launchUrl": "rpc/rideSharing/swagger/index.html",
+      "applicationUrl": "http://localhost:5000"
+    },
+    "Production": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Production"
+      },
+      "launchUrl": "rpc/rideSharing/swagger/index.html",
+      "applicationUrl": "http://localhost:5000"
+    }
+  }
+}
+
