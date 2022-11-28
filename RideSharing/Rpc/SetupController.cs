@@ -4,6 +4,7 @@ using RideSharing.Common;
 using RideSharing.Entities;
 using RideSharing.Enums;
 using RideSharing.Handlers.Configuration;
+using RideSharing.Helpers;
 using RideSharing.Models;
 using RideSharing.Repositories;
 using RideSharing.Services;
@@ -40,10 +41,41 @@ namespace RideSharing.Rpc
             this.CurrentContext = CurrentContext;
         }
 
-        [HttpGet, Route("rpc/RideSharing/setup/init-customer")]
-        public async Task<ActionResult> InitCustomer()
+        [HttpGet, Route("rpc/RideSharing/setup/init-data")]
+        public async Task<ActionResult> InitData()
         {
-            await InitEnum();
+            List<NodeDAO> NodeDAOs = await DataContext.Node.ToListAsync();
+
+            List<BusStop> BusStops = NodeDAOs.Where(x => x.Code.StartsWith("T") && x.Code.Length == 2).Select(x => new BusStop
+            {
+                Name = x.Code,
+                NodeId = x.Id,
+                Node = new Node
+                {
+                    Id = x.Id,
+                    Latitude = x.Latitude,
+                    Longtitude = x.Longtitude,
+                },
+            }).ToList();
+            await UOW.BusStopRepository.BulkMerge(BusStops);
+
+            NodeDAOs = NodeDAOs.Where(x => CalculateDistance(BusStops[3].Node, new Node { Latitude = x.Latitude, Longtitude = x.Longtitude }) < 2).ToList(); ;
+
+            List<CityFreighter> CityFreighter = NodeDAOs.Take(10).Select(x => new CityFreighter
+            {
+                Name = x.Code,
+                NodeId = x.Id,
+            }).ToList();
+            await UOW.CityFreighterRepository.BulkMerge(CityFreighter);
+
+            List<Customer> Customer = NodeDAOs.Skip(10).Select(x => new Customer
+            {
+                Code = x.Code,
+                Name = x.Code,
+                NodeId = x.Id,
+            }).ToList();
+            await UOW.CustomerRepository.BulkMerge(Customer);
+
             return Ok();
         }
 
@@ -57,6 +89,10 @@ namespace RideSharing.Rpc
 
         private async Task InitEnum()
         {
+        }
+        private decimal CalculateDistance(Node start, Node destination)
+        {
+            return StaticParams.CalculateDistance(start.Latitude, start.Longtitude, destination.Latitude, destination.Longtitude);
         }
     }
 }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;using Thinktecture;using Thinktecture;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -30,7 +30,7 @@ namespace RideSharing.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<BusStopDAO>(entity =>
+            modelBuilder.ConfigureTempTable<long>();modelBuilder.ConfigureTempTable<Guid>();modelBuilder.Entity<BusStopDAO>(entity =>
             {
                 entity.Property(e => e.CreatedAt).HasColumnType("datetime");
 

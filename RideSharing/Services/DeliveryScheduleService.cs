@@ -10,6 +10,7 @@ using RideSharing.Services.MDeliveryRoute;
 using RideSharing.Handlers.Configuration;
 using RideSharing.Repositories;
 using RideSharing.Services.MDeliveryTrip;
+using RideSharing.Helpers;
 
 namespace RideSharing.Services
 {
@@ -120,7 +121,7 @@ namespace RideSharing.Services
         }
         public decimal CalculateDistance(Node start, Node destination)
         {
-            return (decimal)Math.Sqrt(Math.Pow((double)(destination.Latitude - start.Latitude), 2) + Math.Pow((double)(destination.Longtitude - start.Longtitude), 2));
+            return StaticParams.CalculateDistance(start.Latitude, start.Longtitude, destination.Latitude, destination.Longtitude);
         }
         public decimal CalculateTotalDistance(DeliveryRoute DeliveryRoute)
         {

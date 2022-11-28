@@ -66,7 +66,7 @@ namespace RideSharing
             _ = DataEntity.WarningResource;
             _ = DataEntity.ErrorResource;
 
-            services.AddControllers().AddNewtonsoftJson(
+            services.AddControllers(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true).AddNewtonsoftJson(
                 options =>
                 {
                     options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
@@ -74,6 +74,8 @@ namespace RideSharing
                     options.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
                     options.SerializerSettings.DateFormatString = "yyyy-MM-ddTHH:mm:ss.fffK";
                 });
+
+            //services.AddPermission(Configuration.GetConnectionString("DataContext"));
 
             services.AddSingleton<IRedisStore, RedisStore>();
             services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
@@ -91,7 +93,7 @@ namespace RideSharing
             });
             EntityFrameworkManager.ContextFactory = context =>
             {
-               var optionsBuilder = new DbContextOptionsBuilder<DataContext>();
+                var optionsBuilder = new DbContextOptionsBuilder<DataContext>();
                 optionsBuilder.UseSqlServer(Configuration.GetConnectionString("DataContext"), sqlOptions =>
                 {
                     sqlOptions.AddTempTableSupport();
@@ -107,7 +109,7 @@ namespace RideSharing
                 .AddClasses(classes => classes.AssignableTo<IServiceScoped>())
                      .AsImplementedInterfaces()
                      .WithScopedLifetime());
-            
+
             services.AddHangfire(configuration => configuration
              .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
              .UseSimpleAssemblyNameTypeSerializer()
@@ -125,7 +127,31 @@ namespace RideSharing
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Budget API", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new List<string>()
+                    }
+                });
             });
 
             services.AddAuthentication(x =>
