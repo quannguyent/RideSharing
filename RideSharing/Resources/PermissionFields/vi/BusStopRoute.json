@@ -2,7 +2,7 @@
   "BusStop": {
       "Id": "@Id",
       "Name": "@Name",
-      "NodeId": "@NodeId",
-      "Node": "@Node",
+      "Latitude": "@Latitude",
+      "Longtitude": "@Longtitude",
   }
 }

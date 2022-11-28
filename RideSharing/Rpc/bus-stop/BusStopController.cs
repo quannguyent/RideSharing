@@ -15,22 +15,18 @@ using System.Net;
 using NGS.Templater;
 using RideSharing.Entities;
 using RideSharing.Services.MBusStop;
-using RideSharing.Services.MNode;
 
 namespace RideSharing.Rpc.bus_stop
 {
     public partial class BusStopController : RpcController
     {
-        private INodeService NodeService;
         private IBusStopService BusStopService;
         private ICurrentContext CurrentContext;
         public BusStopController(
-            INodeService NodeService,
             IBusStopService BusStopService,
             ICurrentContext CurrentContext
         )
         {
-            this.NodeService = NodeService;
             this.BusStopService = BusStopService;
             this.CurrentContext = CurrentContext;
         }
@@ -153,13 +149,6 @@ namespace RideSharing.Rpc.bus_stop
         {
             if (!ModelState.IsValid)
                 throw new BindException(ModelState);
-            NodeFilter NodeFilter = new NodeFilter
-            {
-                Skip = 0,
-                Take = int.MaxValue,
-                Selects = NodeSelect.ALL
-            };
-            List<Node> Nodes = await NodeService.List(NodeFilter);
             List<BusStop> BusStops = new List<BusStop>();
             using (ExcelPackage excelPackage = new ExcelPackage(file.OpenReadStream()))
             {
@@ -170,7 +159,8 @@ namespace RideSharing.Rpc.bus_stop
                 int StartRow = 1;
                 int IdColumn = 0 + StartColumn;
                 int NameColumn = 1 + StartColumn;
-                int NodeIdColumn = 2 + StartColumn;
+                int LatitudeColumn = 2 + StartColumn;
+                int LongtitudeColumn = 3 + StartColumn;
 
                 for (int i = StartRow; i <= worksheet.Dimension.End.Row; i++)
                 {
@@ -178,13 +168,13 @@ namespace RideSharing.Rpc.bus_stop
                         break;
                     string IdValue = worksheet.Cells[i, IdColumn].Value?.ToString();
                     string NameValue = worksheet.Cells[i, NameColumn].Value?.ToString();
-                    string NodeIdValue = worksheet.Cells[i, NodeIdColumn].Value?.ToString();
+                    string LatitudeValue = worksheet.Cells[i, LatitudeColumn].Value?.ToString();
+                    string LongtitudeValue = worksheet.Cells[i, LongtitudeColumn].Value?.ToString();
                     
                     BusStop BusStop = new BusStop();
                     BusStop.Name = NameValue;
-                    Node Node = Nodes.Where(x => x.Id.ToString() == NodeIdValue).FirstOrDefault();
-                    BusStop.NodeId = Node == null ? 0 : Node.Id;
-                    BusStop.Node = Node;
+                    BusStop.Latitude = decimal.TryParse(LatitudeValue, out decimal Latitude) ? Latitude : 0;
+                    BusStop.Longtitude = decimal.TryParse(LongtitudeValue, out decimal Longtitude) ? Longtitude : 0;
                     
                     BusStops.Add(BusStop);
                 }
@@ -205,8 +195,10 @@ namespace RideSharing.Rpc.bus_stop
                             Error += BusStop.Errors[nameof(BusStop.Id)];
                         if (BusStop.Errors.ContainsKey(nameof(BusStop.Name).Camelize()))
                             Error += BusStop.Errors[nameof(BusStop.Name)];
-                        if (BusStop.Errors.ContainsKey(nameof(BusStop.NodeId).Camelize()))
-                            Error += BusStop.Errors[nameof(BusStop.NodeId)];
+                        if (BusStop.Errors.ContainsKey(nameof(BusStop.Latitude).Camelize()))
+                            Error += BusStop.Errors[nameof(BusStop.Latitude)];
+                        if (BusStop.Errors.ContainsKey(nameof(BusStop.Longtitude).Camelize()))
+                            Error += BusStop.Errors[nameof(BusStop.Longtitude)];
                         Errors.Add(Error);
                     }
                 }
@@ -295,14 +287,8 @@ namespace RideSharing.Rpc.bus_stop
             BusStop BusStop = new BusStop();
             BusStop.Id = BusStop_BusStopDTO.Id;
             BusStop.Name = BusStop_BusStopDTO.Name;
-            BusStop.NodeId = BusStop_BusStopDTO.NodeId;
-            BusStop.Node = BusStop_BusStopDTO.Node == null ? null : new Node
-            {
-                Id = BusStop_BusStopDTO.Node.Id,
-                Code = BusStop_BusStopDTO.Node.Code,
-                Longtitude = BusStop_BusStopDTO.Node.Longtitude,
-                Latitude = BusStop_BusStopDTO.Node.Latitude,
-            };
+            BusStop.Latitude = BusStop_BusStopDTO.Latitude;
+            BusStop.Longtitude = BusStop_BusStopDTO.Longtitude;
             BusStop.BaseLanguage = CurrentContext.Language;
             return BusStop;
         }
@@ -318,7 +304,8 @@ namespace RideSharing.Rpc.bus_stop
 
             BusStopFilter.Id = BusStop_BusStopFilterDTO.Id;
             BusStopFilter.Name = BusStop_BusStopFilterDTO.Name;
-            BusStopFilter.NodeId = BusStop_BusStopFilterDTO.NodeId;
+            BusStopFilter.Latitude = BusStop_BusStopFilterDTO.Latitude;
+            BusStopFilter.Longtitude = BusStop_BusStopFilterDTO.Longtitude;
             BusStopFilter.CreatedAt = BusStop_BusStopFilterDTO.CreatedAt;
             BusStopFilter.UpdatedAt = BusStop_BusStopFilterDTO.UpdatedAt;
             return BusStopFilter;

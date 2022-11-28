@@ -26,8 +26,6 @@ namespace RideSharing.Services.MCustomer
             CodeOverLength,
             NameEmpty,
             NameOverLength,
-            NodeEmpty,
-            NodeNotExisted,
         }
     }
 }

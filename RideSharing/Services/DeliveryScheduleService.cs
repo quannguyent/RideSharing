@@ -125,11 +125,14 @@ namespace RideSharing.Services
         }
         public decimal CalculateTotalDistance(DeliveryRoute DeliveryRoute)
         {
-            var LastLocation = DeliveryRoute.CityFreighter.Node;
+            var LastLocation = new Node(DeliveryRoute.CityFreighter.Latitude, DeliveryRoute.CityFreighter.Longtitude);
             foreach (DeliveryTrip DeliveryTrip in DeliveryRoute.DeliveryTrips)
             {
-                DeliveryRoute.TotalEmptyRunDistance += CalculateDistance(LastLocation, DeliveryTrip.PlannedNode.FirstOrDefault());
-                DeliveryRoute.TotalTravelDistance += CalculateDistance(LastLocation, DeliveryTrip.PlannedNode.FirstOrDefault()) + DeliveryTrip.TravelDistance;
+                var FirstNode = DeliveryTrip.PlannedNode.FirstOrDefault();
+                var Distance = StaticParams.CalculateDistance(LastLocation.Latitude, LastLocation.Latitude,
+                    FirstNode.Latitude, FirstNode.Longtitude);
+                DeliveryRoute.TotalEmptyRunDistance += Distance;
+                DeliveryRoute.TotalTravelDistance += Distance;
                 LastLocation = DeliveryTrip.PlannedNode.LastOrDefault();
             }
             return DeliveryRoute.TotalTravelDistance;
@@ -143,22 +146,27 @@ namespace RideSharing.Services
             foreach (BusStop BusStop in BusStops)
             {
                 var newDeliveryRoute = DeliveryRoute;
+                var Distance = StaticParams.CalculateDistance(BusStop.Latitude, BusStop.Latitude,
+                    DeliveryOrder.Customer.Latitude, DeliveryOrder.Customer.Longtitude);
                 DeliveryTrip DeliveryTrip = new DeliveryTrip
                 {
                     BusStopId = BusStop.Id,
                     BusStop = BusStop,
-                    PlannedNode = new List<Node>() { BusStop.Node, DeliveryOrder.Customer.Node },
+                    PlannedNode = new List<Node>() {
+                        new Node(BusStop.Latitude, BusStop.Latitude),
+                        new Node(DeliveryOrder.Customer.Latitude, DeliveryOrder.Customer.Longtitude)
+                    },
                     DeliveryOrders = new List<DeliveryOrder>() { DeliveryOrder },
                     PlannedRoute = new List<Edge>()
                     {
                         new Edge
                         {
-                            Source = BusStop.Node,
-                            Destination = DeliveryOrder.Customer.Node,
-                            Distance = CalculateDistance(BusStop.Node, DeliveryOrder.Customer.Node),
+                            Source = new Node(BusStop.Latitude, BusStop.Latitude),
+                            Destination = new Node(DeliveryOrder.Customer.Latitude, DeliveryOrder.Customer.Longtitude),
+                            Distance = Distance,
                         }
                     },
-                    TravelDistance = CalculateDistance(BusStop.Node, DeliveryOrder.Customer.Node),
+                    TravelDistance = Distance,
                 };
                 DeliveryTrip.BuildPath();
                 if (toFirst)

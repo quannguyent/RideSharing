@@ -307,7 +307,8 @@ namespace RideSharing.Rpc.delivery_order
                 Id = DeliveryOrder_DeliveryOrderDTO.Customer.Id,
                 Code = DeliveryOrder_DeliveryOrderDTO.Customer.Code,
                 Name = DeliveryOrder_DeliveryOrderDTO.Customer.Name,
-                NodeId = DeliveryOrder_DeliveryOrderDTO.Customer.NodeId,
+                Latitude = DeliveryOrder_DeliveryOrderDTO.Customer.Latitude,
+                Longtitude = DeliveryOrder_DeliveryOrderDTO.Customer.Longtitude,
             };
             DeliveryOrder.BaseLanguage = CurrentContext.Language;
             return DeliveryOrder;

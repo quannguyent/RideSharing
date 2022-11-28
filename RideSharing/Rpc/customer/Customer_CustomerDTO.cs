@@ -12,8 +12,8 @@ namespace RideSharing.Rpc.customer
         public long Id { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
-        public long NodeId { get; set; }
-        public Customer_NodeDTO Node { get; set; }
+        public decimal Latitude { get; set; }
+        public decimal Longtitude { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public Customer_CustomerDTO() {}
@@ -22,8 +22,8 @@ namespace RideSharing.Rpc.customer
             this.Id = Customer.Id;
             this.Code = Customer.Code;
             this.Name = Customer.Name;
-            this.NodeId = Customer.NodeId;
-            this.Node = Customer.Node == null ? null : new Customer_NodeDTO(Customer.Node);
+            this.Latitude = Customer.Latitude;
+            this.Longtitude = Customer.Longtitude;
             this.CreatedAt = Customer.CreatedAt;
             this.UpdatedAt = Customer.UpdatedAt;
             this.Informations = Customer.Informations;
@@ -37,7 +37,8 @@ namespace RideSharing.Rpc.customer
         public IdFilter Id { get; set; }
         public StringFilter Code { get; set; }
         public StringFilter Name { get; set; }
-        public IdFilter NodeId { get; set; }
+        public DecimalFilter Latitude { get; set; }
+        public DecimalFilter Longtitude { get; set; }
         public DateFilter CreatedAt { get; set; }
         public DateFilter UpdatedAt { get; set; }
         public CustomerOrder OrderBy { get; set; }

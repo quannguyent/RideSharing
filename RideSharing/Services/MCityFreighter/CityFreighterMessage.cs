@@ -24,8 +24,6 @@ namespace RideSharing.Services.MCityFreighter
             ObjectUsed,
             NameEmpty,
             NameOverLength,
-            NodeEmpty,
-            NodeNotExisted,
         }
     }
 }

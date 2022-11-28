@@ -325,14 +325,16 @@ namespace RideSharing.Rpc.delivery_trip
             {
                 Id = DeliveryTrip_DeliveryTripDTO.BusStop.Id,
                 Name = DeliveryTrip_DeliveryTripDTO.BusStop.Name,
-                NodeId = DeliveryTrip_DeliveryTripDTO.BusStop.NodeId,
+                Latitude = DeliveryTrip_DeliveryTripDTO.BusStop.Latitude,
+                Longtitude = DeliveryTrip_DeliveryTripDTO.BusStop.Longtitude,
             };
             DeliveryTrip.CityFreighter = DeliveryTrip_DeliveryTripDTO.CityFreighter == null ? null : new CityFreighter
             {
                 Id = DeliveryTrip_DeliveryTripDTO.CityFreighter.Id,
                 Name = DeliveryTrip_DeliveryTripDTO.CityFreighter.Name,
                 Capacity = DeliveryTrip_DeliveryTripDTO.CityFreighter.Capacity,
-                NodeId = DeliveryTrip_DeliveryTripDTO.CityFreighter.NodeId,
+                Latitude = DeliveryTrip_DeliveryTripDTO.CityFreighter.Latitude,
+                Longtitude = DeliveryTrip_DeliveryTripDTO.CityFreighter.Longtitude,
             };
             DeliveryTrip.BaseLanguage = CurrentContext.Language;
             return DeliveryTrip;

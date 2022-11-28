@@ -41,7 +41,8 @@ namespace RideSharing.Services.MBusStop
         public async Task<bool> Create(BusStop BusStop)
         {
             await ValidateName(BusStop);
-            await ValidateNode(BusStop);
+            await ValidateLatitude(BusStop);
+            await ValidateLongtitude(BusStop);
             return BusStop.IsValidated;
         }
 
@@ -50,7 +51,8 @@ namespace RideSharing.Services.MBusStop
             if (await ValidateId(BusStop))
             {
                 await ValidateName(BusStop);
-                await ValidateNode(BusStop);
+                await ValidateLatitude(BusStop);
+                await ValidateLongtitude(BusStop);
             }
             return BusStop.IsValidated;
         }
@@ -106,23 +108,12 @@ namespace RideSharing.Services.MBusStop
             }
             return BusStop.IsValidated;
         }
-        private async Task<bool> ValidateNode(BusStop BusStop)
-        {       
-            if(BusStop.NodeId == 0)
-            {
-                BusStop.AddError(nameof(BusStopValidator), nameof(BusStop.Node), BusStopMessage.Error.NodeEmpty, BusStopMessage);
-            }
-            else
-            {
-                int count = await UOW.NodeRepository.CountAll(new NodeFilter
-                {
-                    Id = new IdFilter{ Equal =  BusStop.NodeId },
-                });
-                if(count == 0)
-                {
-                    BusStop.AddError(nameof(BusStopValidator), nameof(BusStop.Node), BusStopMessage.Error.NodeNotExisted, BusStopMessage);
-                }
-            }
+        private async Task<bool> ValidateLatitude(BusStop BusStop)
+        {   
+            return true;
+        }
+        private async Task<bool> ValidateLongtitude(BusStop BusStop)
+        {   
             return true;
         }
     }

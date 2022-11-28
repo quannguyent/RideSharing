@@ -1,0 +1,24 @@
+{
+  "State": {
+    "Id": {
+    },
+    "JobId": {
+    },
+    "Name": {
+      "NameEmpty": "Chưa nhập @Name",
+      "NameOverLength": "Name quá dài"
+    },
+    "Reason": {
+      "ReasonEmpty": "Chưa nhập @Reason",
+      "ReasonOverLength": "Reason quá dài"
+    },
+    "Data": {
+      "DataEmpty": "Chưa nhập @Data",
+      "DataOverLength": "Data quá dài"
+    },
+    "Job": {
+      "JobEmpty": "Chưa chọn @Job",
+      "JobNotExisted": "@Job không tồn tại"
+    }
+  }
+}

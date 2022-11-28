@@ -12,7 +12,8 @@ namespace RideSharing.Rpc.delivery_order
         public long Id { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
-        public long NodeId { get; set; }
+        public decimal Latitude { get; set; }
+        public decimal Longtitude { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public DeliveryOrder_CustomerDTO() {}
@@ -21,7 +22,8 @@ namespace RideSharing.Rpc.delivery_order
             this.Id = Customer.Id;
             this.Code = Customer.Code;
             this.Name = Customer.Name;
-            this.NodeId = Customer.NodeId;
+            this.Latitude = Customer.Latitude;
+            this.Longtitude = Customer.Longtitude;
             this.CreatedAt = Customer.CreatedAt;
             this.UpdatedAt = Customer.UpdatedAt;
             this.Informations = Customer.Informations;
@@ -35,7 +37,8 @@ namespace RideSharing.Rpc.delivery_order
         public IdFilter Id { get; set; }
         public StringFilter Code { get; set; }
         public StringFilter Name { get; set; }
-        public IdFilter NodeId { get; set; }
+        public DecimalFilter Latitude { get; set; }
+        public DecimalFilter Longtitude { get; set; }
         public CustomerOrder OrderBy { get; set; }
     }
 }

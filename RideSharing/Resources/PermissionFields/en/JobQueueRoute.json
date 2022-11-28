@@ -1,0 +1,8 @@
+{
+  "JobQueue": {
+      "Id": "@Id",
+      "JobId": "@JobId",
+      "Queue": "@Queue",
+      "FetchedAt": "@FetchedAt",
+  }
+}

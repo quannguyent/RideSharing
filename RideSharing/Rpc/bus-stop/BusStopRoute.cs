@@ -13,7 +13,6 @@ using OfficeOpenXml;
 using RideSharing.Entities;
 using RideSharing.Services.MBusStop;
 using System.ComponentModel;
-using RideSharing.Services.MNode;
 
 namespace RideSharing.Rpc.bus_stop
 {
@@ -36,23 +35,22 @@ namespace RideSharing.Rpc.bus_stop
         public const string ExportTemplate = Default + "/export-template";
         public const string BulkDelete = Default + "/bulk-delete";
         
-        public const string FilterListNode = Default + "/filter-list-node";
 
-        public const string SingleListNode = Default + "/single-list-node";
 
 
         public static Dictionary<string, long> Filters = new Dictionary<string, long>
         {
             { "BusStopId", FieldTypeEnum.ID.Id },
             { nameof(BusStopFilter.Name), FieldTypeEnum.STRING.Id },
-            { nameof(BusStopFilter.NodeId), FieldTypeEnum.ID.Id },
+            { nameof(BusStopFilter.Latitude), FieldTypeEnum.DECIMAL.Id },
+            { nameof(BusStopFilter.Longtitude), FieldTypeEnum.DECIMAL.Id },
         };
 
         private static List<string> FilterList = new List<string> { 
-            FilterListNode,
+            
         };
         private static List<string> SingleList = new List<string> { 
-            SingleListNode, 
+            
         };
         private static List<string> CountList = new List<string> { 
             

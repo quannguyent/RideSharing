@@ -37,12 +37,12 @@ namespace RideSharing.Entities
         }
         public void BuildPath()
         {
-            Path = $"({CityFreighter.Node.Latitude}, {CityFreighter.Node.Longtitude})";
+            Path = $"({CityFreighter.Latitude}, {CityFreighter.Longtitude})";
             foreach (var trip in DeliveryTrips)
             {
                 Path += $"-> {trip.Path}";
             }
-            Path += $"({CityFreighter.Node.Latitude}, {CityFreighter.Node.Longtitude})";
+            Path += $"({CityFreighter.Latitude}, {CityFreighter.Longtitude})";
         }
     }
 

@@ -15,22 +15,18 @@ using System.Net;
 using NGS.Templater;
 using RideSharing.Entities;
 using RideSharing.Services.MCityFreighter;
-using RideSharing.Services.MNode;
 
 namespace RideSharing.Rpc.city_freighter
 {
     public partial class CityFreighterController : RpcController
     {
-        private INodeService NodeService;
         private ICityFreighterService CityFreighterService;
         private ICurrentContext CurrentContext;
         public CityFreighterController(
-            INodeService NodeService,
             ICityFreighterService CityFreighterService,
             ICurrentContext CurrentContext
         )
         {
-            this.NodeService = NodeService;
             this.CityFreighterService = CityFreighterService;
             this.CurrentContext = CurrentContext;
         }
@@ -153,13 +149,6 @@ namespace RideSharing.Rpc.city_freighter
         {
             if (!ModelState.IsValid)
                 throw new BindException(ModelState);
-            NodeFilter NodeFilter = new NodeFilter
-            {
-                Skip = 0,
-                Take = int.MaxValue,
-                Selects = NodeSelect.ALL
-            };
-            List<Node> Nodes = await NodeService.List(NodeFilter);
             List<CityFreighter> CityFreighters = new List<CityFreighter>();
             using (ExcelPackage excelPackage = new ExcelPackage(file.OpenReadStream()))
             {
@@ -171,7 +160,8 @@ namespace RideSharing.Rpc.city_freighter
                 int IdColumn = 0 + StartColumn;
                 int NameColumn = 1 + StartColumn;
                 int CapacityColumn = 2 + StartColumn;
-                int NodeIdColumn = 3 + StartColumn;
+                int LatitudeColumn = 3 + StartColumn;
+                int LongtitudeColumn = 4 + StartColumn;
 
                 for (int i = StartRow; i <= worksheet.Dimension.End.Row; i++)
                 {
@@ -180,14 +170,14 @@ namespace RideSharing.Rpc.city_freighter
                     string IdValue = worksheet.Cells[i, IdColumn].Value?.ToString();
                     string NameValue = worksheet.Cells[i, NameColumn].Value?.ToString();
                     string CapacityValue = worksheet.Cells[i, CapacityColumn].Value?.ToString();
-                    string NodeIdValue = worksheet.Cells[i, NodeIdColumn].Value?.ToString();
+                    string LatitudeValue = worksheet.Cells[i, LatitudeColumn].Value?.ToString();
+                    string LongtitudeValue = worksheet.Cells[i, LongtitudeColumn].Value?.ToString();
                     
                     CityFreighter CityFreighter = new CityFreighter();
                     CityFreighter.Name = NameValue;
                     CityFreighter.Capacity = decimal.TryParse(CapacityValue, out decimal Capacity) ? Capacity : 0;
-                    Node Node = Nodes.Where(x => x.Id.ToString() == NodeIdValue).FirstOrDefault();
-                    CityFreighter.NodeId = Node == null ? 0 : Node.Id;
-                    CityFreighter.Node = Node;
+                    CityFreighter.Latitude = decimal.TryParse(LatitudeValue, out decimal Latitude) ? Latitude : 0;
+                    CityFreighter.Longtitude = decimal.TryParse(LongtitudeValue, out decimal Longtitude) ? Longtitude : 0;
                     
                     CityFreighters.Add(CityFreighter);
                 }
@@ -210,8 +200,10 @@ namespace RideSharing.Rpc.city_freighter
                             Error += CityFreighter.Errors[nameof(CityFreighter.Name)];
                         if (CityFreighter.Errors.ContainsKey(nameof(CityFreighter.Capacity).Camelize()))
                             Error += CityFreighter.Errors[nameof(CityFreighter.Capacity)];
-                        if (CityFreighter.Errors.ContainsKey(nameof(CityFreighter.NodeId).Camelize()))
-                            Error += CityFreighter.Errors[nameof(CityFreighter.NodeId)];
+                        if (CityFreighter.Errors.ContainsKey(nameof(CityFreighter.Latitude).Camelize()))
+                            Error += CityFreighter.Errors[nameof(CityFreighter.Latitude)];
+                        if (CityFreighter.Errors.ContainsKey(nameof(CityFreighter.Longtitude).Camelize()))
+                            Error += CityFreighter.Errors[nameof(CityFreighter.Longtitude)];
                         Errors.Add(Error);
                     }
                 }
@@ -301,14 +293,8 @@ namespace RideSharing.Rpc.city_freighter
             CityFreighter.Id = CityFreighter_CityFreighterDTO.Id;
             CityFreighter.Name = CityFreighter_CityFreighterDTO.Name;
             CityFreighter.Capacity = CityFreighter_CityFreighterDTO.Capacity;
-            CityFreighter.NodeId = CityFreighter_CityFreighterDTO.NodeId;
-            CityFreighter.Node = CityFreighter_CityFreighterDTO.Node == null ? null : new Node
-            {
-                Id = CityFreighter_CityFreighterDTO.Node.Id,
-                Code = CityFreighter_CityFreighterDTO.Node.Code,
-                Longtitude = CityFreighter_CityFreighterDTO.Node.Longtitude,
-                Latitude = CityFreighter_CityFreighterDTO.Node.Latitude,
-            };
+            CityFreighter.Latitude = CityFreighter_CityFreighterDTO.Latitude;
+            CityFreighter.Longtitude = CityFreighter_CityFreighterDTO.Longtitude;
             CityFreighter.BaseLanguage = CurrentContext.Language;
             return CityFreighter;
         }
@@ -325,7 +311,8 @@ namespace RideSharing.Rpc.city_freighter
             CityFreighterFilter.Id = CityFreighter_CityFreighterFilterDTO.Id;
             CityFreighterFilter.Name = CityFreighter_CityFreighterFilterDTO.Name;
             CityFreighterFilter.Capacity = CityFreighter_CityFreighterFilterDTO.Capacity;
-            CityFreighterFilter.NodeId = CityFreighter_CityFreighterFilterDTO.NodeId;
+            CityFreighterFilter.Latitude = CityFreighter_CityFreighterFilterDTO.Latitude;
+            CityFreighterFilter.Longtitude = CityFreighter_CityFreighterFilterDTO.Longtitude;
             CityFreighterFilter.CreatedAt = CityFreighter_CityFreighterFilterDTO.CreatedAt;
             CityFreighterFilter.UpdatedAt = CityFreighter_CityFreighterFilterDTO.UpdatedAt;
             return CityFreighterFilter;

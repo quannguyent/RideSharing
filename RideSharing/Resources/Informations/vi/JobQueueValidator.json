@@ -1,0 +1,18 @@
+{
+  "JobQueue": {
+    "Id": {
+      "IdEmpty": "Chưa chọn @Id",
+      "IdNotExisted": "@Id không tồn tại"
+    },
+    "JobId": {
+    },
+    "Queue": {
+      "QueueEmpty": "Chưa nhập @Queue",
+      "QueueOverLength": "Queue quá dài"
+    },
+    "FetchedAt": {
+      "FetchedAtEmpty": "Chưa nhập @FetchedAt",
+      "FetchedAtInvalid": "@FetchedAt không hợp lệ"
+    }
+  }
+}

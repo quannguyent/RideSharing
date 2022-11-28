@@ -219,6 +219,7 @@ namespace RideSharing.Services.MDeliveryTrip
         private void Sync(List<DeliveryTrip> DeliveryTrips)
         {
 
+
             
         }
     }

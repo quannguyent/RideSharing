@@ -11,8 +11,8 @@ namespace RideSharing.Rpc.bus_stop
     {
         public long Id { get; set; }
         public string Name { get; set; }
-        public long NodeId { get; set; }
-        public BusStop_NodeDTO Node { get; set; }
+        public decimal Latitude { get; set; }
+        public decimal Longtitude { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public BusStop_BusStopDTO() {}
@@ -20,8 +20,8 @@ namespace RideSharing.Rpc.bus_stop
         {
             this.Id = BusStop.Id;
             this.Name = BusStop.Name;
-            this.NodeId = BusStop.NodeId;
-            this.Node = BusStop.Node == null ? null : new BusStop_NodeDTO(BusStop.Node);
+            this.Latitude = BusStop.Latitude;
+            this.Longtitude = BusStop.Longtitude;
             this.CreatedAt = BusStop.CreatedAt;
             this.UpdatedAt = BusStop.UpdatedAt;
             this.Informations = BusStop.Informations;
@@ -34,7 +34,8 @@ namespace RideSharing.Rpc.bus_stop
     {
         public IdFilter Id { get; set; }
         public StringFilter Name { get; set; }
-        public IdFilter NodeId { get; set; }
+        public DecimalFilter Latitude { get; set; }
+        public DecimalFilter Longtitude { get; set; }
         public DateFilter CreatedAt { get; set; }
         public DateFilter UpdatedAt { get; set; }
         public BusStopOrder OrderBy { get; set; }

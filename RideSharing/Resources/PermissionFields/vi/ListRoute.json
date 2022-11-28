@@ -1,0 +1,8 @@
+{
+  "List": {
+      "Id": "@Id",
+      "Key": "@Key",
+      "Value": "@Value",
+      "ExpireAt": "@ExpireAt",
+  }
+}

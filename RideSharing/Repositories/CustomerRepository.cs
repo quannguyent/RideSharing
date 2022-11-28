@@ -45,7 +45,8 @@ namespace RideSharing.Repositories
             query = query.Where(q => q.Id, filter.Id);
             query = query.Where(q => q.Code, filter.Code);
             query = query.Where(q => q.Name, filter.Name);
-            query = query.Where(q => q.NodeId, filter.NodeId);
+            query = query.Where(q => q.Latitude, filter.Latitude);
+            query = query.Where(q => q.Longtitude, filter.Longtitude);
             return query;
         }
 
@@ -60,7 +61,8 @@ namespace RideSharing.Repositories
                 queryable = queryable.Where(q => q.Id, CustomerFilter.Id);
                 queryable = queryable.Where(q => q.Code, CustomerFilter.Code);
                 queryable = queryable.Where(q => q.Name, CustomerFilter.Name);
-                queryable = queryable.Where(q => q.NodeId, CustomerFilter.NodeId);
+                queryable = queryable.Where(q => q.Latitude, CustomerFilter.Latitude);
+                queryable = queryable.Where(q => q.Longtitude, CustomerFilter.Longtitude);
                 initQuery = initQuery.Union(queryable);
             }
             return initQuery;
@@ -82,8 +84,11 @@ namespace RideSharing.Repositories
                         case CustomerOrder.Name:
                             query = query.OrderBy(q => q.Name);
                             break;
-                        case CustomerOrder.Node:
-                            query = query.OrderBy(q => q.NodeId);
+                        case CustomerOrder.Latitude:
+                            query = query.OrderBy(q => q.Latitude);
+                            break;
+                        case CustomerOrder.Longtitude:
+                            query = query.OrderBy(q => q.Longtitude);
                             break;
                     }
                     break;
@@ -99,8 +104,11 @@ namespace RideSharing.Repositories
                         case CustomerOrder.Name:
                             query = query.OrderByDescending(q => q.Name);
                             break;
-                        case CustomerOrder.Node:
-                            query = query.OrderByDescending(q => q.NodeId);
+                        case CustomerOrder.Latitude:
+                            query = query.OrderByDescending(q => q.Latitude);
+                            break;
+                        case CustomerOrder.Longtitude:
+                            query = query.OrderByDescending(q => q.Longtitude);
                             break;
                     }
                     break;
@@ -116,14 +124,8 @@ namespace RideSharing.Repositories
                 Id = filter.Selects.Contains(CustomerSelect.Id) ? q.Id : default(long),
                 Code = filter.Selects.Contains(CustomerSelect.Code) ? q.Code : default(string),
                 Name = filter.Selects.Contains(CustomerSelect.Name) ? q.Name : default(string),
-                NodeId = filter.Selects.Contains(CustomerSelect.Node) ? q.NodeId : default(long),
-                Node = filter.Selects.Contains(CustomerSelect.Node) && q.Node != null ? new Node
-                {
-                    Id = q.Node.Id,
-                    Code = q.Node.Code,
-                    Longtitude = q.Node.Longtitude,
-                    Latitude = q.Node.Latitude,
-                } : null,
+                Latitude = filter.Selects.Contains(CustomerSelect.Latitude) ? q.Latitude : default(decimal),
+                Longtitude = filter.Selects.Contains(CustomerSelect.Longtitude) ? q.Longtitude : default(decimal),
                 CreatedAt = q.CreatedAt,
                 UpdatedAt = q.UpdatedAt,
                 DeletedAt = q.DeletedAt,
@@ -172,14 +174,8 @@ namespace RideSharing.Repositories
                 Id = x.Id,
                 Code = x.Code,
                 Name = x.Name,
-                NodeId = x.NodeId,
-                Node = x.Node == null ? null : new Node
-                {
-                    Id = x.Node.Id,
-                    Code = x.Node.Code,
-                    Longtitude = x.Node.Longtitude,
-                    Latitude = x.Node.Latitude,
-                },
+                Latitude = x.Latitude,
+                Longtitude = x.Longtitude,
             }).ToListAsync();
             
 
@@ -198,14 +194,8 @@ namespace RideSharing.Repositories
                 Id = x.Id,
                 Code = x.Code,
                 Name = x.Name,
-                NodeId = x.NodeId,
-                Node = x.Node == null ? null : new Node
-                {
-                    Id = x.Node.Id,
-                    Code = x.Node.Code,
-                    Longtitude = x.Node.Longtitude,
-                    Latitude = x.Node.Latitude,
-                },
+                Latitude = x.Latitude,
+                Longtitude = x.Longtitude,
             }).FirstOrDefaultAsync();
 
             if (Customer == null)
@@ -219,7 +209,8 @@ namespace RideSharing.Repositories
             CustomerDAO.Id = Customer.Id;
             CustomerDAO.Code = Customer.Code;
             CustomerDAO.Name = Customer.Name;
-            CustomerDAO.NodeId = Customer.NodeId;
+            CustomerDAO.Latitude = Customer.Latitude;
+            CustomerDAO.Longtitude = Customer.Longtitude;
             CustomerDAO.CreatedAt = StaticParams.DateTimeNow;
             CustomerDAO.UpdatedAt = StaticParams.DateTimeNow;
             DataContext.Customer.Add(CustomerDAO);
@@ -239,7 +230,8 @@ namespace RideSharing.Repositories
             CustomerDAO.Id = Customer.Id;
             CustomerDAO.Code = Customer.Code;
             CustomerDAO.Name = Customer.Name;
-            CustomerDAO.NodeId = Customer.NodeId;
+            CustomerDAO.Latitude = Customer.Latitude;
+            CustomerDAO.Longtitude = Customer.Longtitude;
             CustomerDAO.UpdatedAt = StaticParams.DateTimeNow;
             await DataContext.SaveChangesAsync();
             await SaveReference(Customer);
@@ -283,7 +275,8 @@ namespace RideSharing.Repositories
                 }
                 CustomerDAO.Code = Customer.Code;
                 CustomerDAO.Name = Customer.Name;
-                CustomerDAO.NodeId = Customer.NodeId;
+                CustomerDAO.Latitude = Customer.Latitude;
+                CustomerDAO.Longtitude = Customer.Longtitude;
                 CustomerDAO.UpdatedAt = StaticParams.DateTimeNow;
             }
             await DataContext.Customer.BulkInsertAsync(Inserts);

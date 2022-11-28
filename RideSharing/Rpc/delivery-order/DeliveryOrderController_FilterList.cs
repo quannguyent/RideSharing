@@ -33,7 +33,8 @@ namespace RideSharing.Rpc.delivery_order
             CustomerFilter.Id = DeliveryOrder_CustomerFilterDTO.Id;
             CustomerFilter.Code = DeliveryOrder_CustomerFilterDTO.Code;
             CustomerFilter.Name = DeliveryOrder_CustomerFilterDTO.Name;
-            CustomerFilter.NodeId = DeliveryOrder_CustomerFilterDTO.NodeId;
+            CustomerFilter.Latitude = DeliveryOrder_CustomerFilterDTO.Latitude;
+            CustomerFilter.Longtitude = DeliveryOrder_CustomerFilterDTO.Longtitude;
 
             List<Customer> Customers = await CustomerService.List(CustomerFilter);
             List<DeliveryOrder_CustomerDTO> DeliveryOrder_CustomerDTOs = Customers

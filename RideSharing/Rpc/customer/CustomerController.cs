@@ -15,22 +15,18 @@ using System.Net;
 using NGS.Templater;
 using RideSharing.Entities;
 using RideSharing.Services.MCustomer;
-using RideSharing.Services.MNode;
 
 namespace RideSharing.Rpc.customer
 {
     public partial class CustomerController : RpcController
     {
-        private INodeService NodeService;
         private ICustomerService CustomerService;
         private ICurrentContext CurrentContext;
         public CustomerController(
-            INodeService NodeService,
             ICustomerService CustomerService,
             ICurrentContext CurrentContext
         )
         {
-            this.NodeService = NodeService;
             this.CustomerService = CustomerService;
             this.CurrentContext = CurrentContext;
         }
@@ -153,13 +149,6 @@ namespace RideSharing.Rpc.customer
         {
             if (!ModelState.IsValid)
                 throw new BindException(ModelState);
-            NodeFilter NodeFilter = new NodeFilter
-            {
-                Skip = 0,
-                Take = int.MaxValue,
-                Selects = NodeSelect.ALL
-            };
-            List<Node> Nodes = await NodeService.List(NodeFilter);
             List<Customer> Customers = new List<Customer>();
             using (ExcelPackage excelPackage = new ExcelPackage(file.OpenReadStream()))
             {
@@ -171,7 +160,8 @@ namespace RideSharing.Rpc.customer
                 int IdColumn = 0 + StartColumn;
                 int CodeColumn = 1 + StartColumn;
                 int NameColumn = 2 + StartColumn;
-                int NodeIdColumn = 3 + StartColumn;
+                int LatitudeColumn = 3 + StartColumn;
+                int LongtitudeColumn = 4 + StartColumn;
 
                 for (int i = StartRow; i <= worksheet.Dimension.End.Row; i++)
                 {
@@ -180,14 +170,14 @@ namespace RideSharing.Rpc.customer
                     string IdValue = worksheet.Cells[i, IdColumn].Value?.ToString();
                     string CodeValue = worksheet.Cells[i, CodeColumn].Value?.ToString();
                     string NameValue = worksheet.Cells[i, NameColumn].Value?.ToString();
-                    string NodeIdValue = worksheet.Cells[i, NodeIdColumn].Value?.ToString();
+                    string LatitudeValue = worksheet.Cells[i, LatitudeColumn].Value?.ToString();
+                    string LongtitudeValue = worksheet.Cells[i, LongtitudeColumn].Value?.ToString();
                     
                     Customer Customer = new Customer();
                     Customer.Code = CodeValue;
                     Customer.Name = NameValue;
-                    Node Node = Nodes.Where(x => x.Id.ToString() == NodeIdValue).FirstOrDefault();
-                    Customer.NodeId = Node == null ? 0 : Node.Id;
-                    Customer.Node = Node;
+                    Customer.Latitude = decimal.TryParse(LatitudeValue, out decimal Latitude) ? Latitude : 0;
+                    Customer.Longtitude = decimal.TryParse(LongtitudeValue, out decimal Longtitude) ? Longtitude : 0;
                     
                     Customers.Add(Customer);
                 }
@@ -210,8 +200,10 @@ namespace RideSharing.Rpc.customer
                             Error += Customer.Errors[nameof(Customer.Code)];
                         if (Customer.Errors.ContainsKey(nameof(Customer.Name).Camelize()))
                             Error += Customer.Errors[nameof(Customer.Name)];
-                        if (Customer.Errors.ContainsKey(nameof(Customer.NodeId).Camelize()))
-                            Error += Customer.Errors[nameof(Customer.NodeId)];
+                        if (Customer.Errors.ContainsKey(nameof(Customer.Latitude).Camelize()))
+                            Error += Customer.Errors[nameof(Customer.Latitude)];
+                        if (Customer.Errors.ContainsKey(nameof(Customer.Longtitude).Camelize()))
+                            Error += Customer.Errors[nameof(Customer.Longtitude)];
                         Errors.Add(Error);
                     }
                 }
@@ -301,14 +293,8 @@ namespace RideSharing.Rpc.customer
             Customer.Id = Customer_CustomerDTO.Id;
             Customer.Code = Customer_CustomerDTO.Code;
             Customer.Name = Customer_CustomerDTO.Name;
-            Customer.NodeId = Customer_CustomerDTO.NodeId;
-            Customer.Node = Customer_CustomerDTO.Node == null ? null : new Node
-            {
-                Id = Customer_CustomerDTO.Node.Id,
-                Code = Customer_CustomerDTO.Node.Code,
-                Longtitude = Customer_CustomerDTO.Node.Longtitude,
-                Latitude = Customer_CustomerDTO.Node.Latitude,
-            };
+            Customer.Latitude = Customer_CustomerDTO.Latitude;
+            Customer.Longtitude = Customer_CustomerDTO.Longtitude;
             Customer.BaseLanguage = CurrentContext.Language;
             return Customer;
         }
@@ -325,7 +311,8 @@ namespace RideSharing.Rpc.customer
             CustomerFilter.Id = Customer_CustomerFilterDTO.Id;
             CustomerFilter.Code = Customer_CustomerFilterDTO.Code;
             CustomerFilter.Name = Customer_CustomerFilterDTO.Name;
-            CustomerFilter.NodeId = Customer_CustomerFilterDTO.NodeId;
+            CustomerFilter.Latitude = Customer_CustomerFilterDTO.Latitude;
+            CustomerFilter.Longtitude = Customer_CustomerFilterDTO.Longtitude;
             CustomerFilter.CreatedAt = Customer_CustomerFilterDTO.CreatedAt;
             CustomerFilter.UpdatedAt = Customer_CustomerFilterDTO.UpdatedAt;
             return CustomerFilter;

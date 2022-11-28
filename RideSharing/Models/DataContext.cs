@@ -1,6 +1,7 @@
-﻿using System;using Thinktecture;using Thinktecture;
+using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Thinktecture;
 
 namespace RideSharing.Models
 {
@@ -30,23 +31,22 @@ namespace RideSharing.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ConfigureTempTable<long>();modelBuilder.ConfigureTempTable<Guid>();modelBuilder.Entity<BusStopDAO>(entity =>
+            modelBuilder.ConfigureTempTable<long>(); modelBuilder.ConfigureTempTable<Guid>(); 
+            modelBuilder.Entity<BusStopDAO>(entity =>
             {
                 entity.Property(e => e.CreatedAt).HasColumnType("datetime");
 
                 entity.Property(e => e.DeletedAt).HasColumnType("datetime");
+
+                entity.Property(e => e.Latitude).HasColumnType("decimal(18, 10)");
+
+                entity.Property(e => e.Longtitude).HasColumnType("decimal(18, 10)");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50);
 
                 entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
-
-                entity.HasOne(d => d.Node)
-                    .WithMany(p => p.BusStops)
-                    .HasForeignKey(d => d.NodeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_BusStop_Node");
             });
 
             modelBuilder.Entity<CityFreighterDAO>(entity =>
@@ -57,17 +57,15 @@ namespace RideSharing.Models
 
                 entity.Property(e => e.DeletedAt).HasColumnType("datetime");
 
+                entity.Property(e => e.Latitude).HasColumnType("decimal(18, 10)");
+
+                entity.Property(e => e.Longtitude).HasColumnType("decimal(18, 10)");
+
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50);
 
                 entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
-
-                entity.HasOne(d => d.Node)
-                    .WithMany(p => p.CityFreighters)
-                    .HasForeignKey(d => d.NodeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_CityFreighter_Node");
             });
 
             modelBuilder.Entity<CustomerDAO>(entity =>
@@ -80,17 +78,15 @@ namespace RideSharing.Models
 
                 entity.Property(e => e.DeletedAt).HasColumnType("datetime");
 
+                entity.Property(e => e.Latitude).HasColumnType("decimal(18, 10)");
+
+                entity.Property(e => e.Longtitude).HasColumnType("decimal(18, 10)");
+
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50);
 
                 entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
-
-                entity.HasOne(d => d.Node)
-                    .WithMany(p => p.Customers)
-                    .HasForeignKey(d => d.NodeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Customer_Node");
             });
 
             modelBuilder.Entity<DeliveryOrderDAO>(entity =>
@@ -168,6 +164,8 @@ namespace RideSharing.Models
 
             modelBuilder.Entity<NodeDAO>(entity =>
             {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
                 entity.Property(e => e.Code)
                     .IsRequired()
                     .HasMaxLength(4000);

@@ -11,8 +11,8 @@ namespace RideSharing.Entities
     {
         public long Id { get; set; }
         public string Name { get; set; }
-        public long NodeId { get; set; }
-        public Node Node { get; set; }
+        public decimal Latitude { get; set; }
+        public decimal Longtitude { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
@@ -22,7 +22,8 @@ namespace RideSharing.Entities
             if (other == null) return false;
             if (this.Id != other.Id) return false;
             if (this.Name != other.Name) return false;
-            if (this.NodeId != other.NodeId) return false;
+            if (this.Latitude != other.Latitude) return false;
+            if (this.Longtitude != other.Longtitude) return false;
             return true;
         }
         public override int GetHashCode()
@@ -35,7 +36,8 @@ namespace RideSharing.Entities
     {
         public IdFilter Id { get; set; }
         public StringFilter Name { get; set; }
-        public IdFilter NodeId { get; set; }
+        public DecimalFilter Latitude { get; set; }
+        public DecimalFilter Longtitude { get; set; }
         public DateFilter CreatedAt { get; set; }
         public DateFilter UpdatedAt { get; set; }
         public List<BusStopFilter> OrFilter { get; set; }
@@ -48,7 +50,8 @@ namespace RideSharing.Entities
     {
         Id = 0,
         Name = 1,
-        Node = 2,
+        Latitude = 2,
+        Longtitude = 3,
         CreatedAt = 50,
         UpdatedAt = 51,
     }
@@ -59,6 +62,7 @@ namespace RideSharing.Entities
         ALL = E.ALL,
         Id = E._0,
         Name = E._1,
-        Node = E._2,
+        Latitude = E._2,
+        Longtitude = E._3,
     }
 }

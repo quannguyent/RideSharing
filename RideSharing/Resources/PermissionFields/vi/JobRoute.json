@@ -1,0 +1,10 @@
+{
+  "Job": {
+      "Id": "@Id",
+      "StateId": "@StateId",
+      "StateName": "@StateName",
+      "InvocationData": "@InvocationData",
+      "Arguments": "@Arguments",
+      "ExpireAt": "@ExpireAt",
+  }
+}

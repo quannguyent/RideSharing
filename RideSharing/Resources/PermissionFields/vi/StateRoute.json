@@ -1,0 +1,10 @@
+{
+  "State": {
+      "Id": "@Id",
+      "JobId": "@JobId",
+      "Name": "@Name",
+      "Reason": "@Reason",
+      "Data": "@Data",
+      "Job": "@Job",
+  }
+}

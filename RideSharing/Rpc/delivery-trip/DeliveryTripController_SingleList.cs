@@ -33,7 +33,8 @@ namespace RideSharing.Rpc.delivery_trip
             BusStopFilter.Selects = BusStopSelect.ALL;
             BusStopFilter.Id = DeliveryTrip_BusStopFilterDTO.Id;
             BusStopFilter.Name = DeliveryTrip_BusStopFilterDTO.Name;
-            BusStopFilter.NodeId = DeliveryTrip_BusStopFilterDTO.NodeId;
+            BusStopFilter.Latitude = DeliveryTrip_BusStopFilterDTO.Latitude;
+            BusStopFilter.Longtitude = DeliveryTrip_BusStopFilterDTO.Longtitude;
             List<BusStop> BusStops = await BusStopService.List(BusStopFilter);
             List<DeliveryTrip_BusStopDTO> DeliveryTrip_BusStopDTOs = BusStops
                 .Select(x => new DeliveryTrip_BusStopDTO(x)).ToList();
@@ -54,7 +55,8 @@ namespace RideSharing.Rpc.delivery_trip
             CityFreighterFilter.Id = DeliveryTrip_CityFreighterFilterDTO.Id;
             CityFreighterFilter.Name = DeliveryTrip_CityFreighterFilterDTO.Name;
             CityFreighterFilter.Capacity = DeliveryTrip_CityFreighterFilterDTO.Capacity;
-            CityFreighterFilter.NodeId = DeliveryTrip_CityFreighterFilterDTO.NodeId;
+            CityFreighterFilter.Latitude = DeliveryTrip_CityFreighterFilterDTO.Latitude;
+            CityFreighterFilter.Longtitude = DeliveryTrip_CityFreighterFilterDTO.Longtitude;
             List<CityFreighter> CityFreighters = await CityFreighterService.List(CityFreighterFilter);
             List<DeliveryTrip_CityFreighterDTO> DeliveryTrip_CityFreighterDTOs = CityFreighters
                 .Select(x => new DeliveryTrip_CityFreighterDTO(x)).ToList();

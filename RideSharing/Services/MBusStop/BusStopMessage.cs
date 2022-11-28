@@ -24,8 +24,6 @@ namespace RideSharing.Services.MBusStop
             ObjectUsed,
             NameEmpty,
             NameOverLength,
-            NodeEmpty,
-            NodeNotExisted,
         }
     }
 }

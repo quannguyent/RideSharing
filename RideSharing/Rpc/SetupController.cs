@@ -49,22 +49,19 @@ namespace RideSharing.Rpc
             List<BusStop> BusStops = NodeDAOs.Where(x => x.Code.StartsWith("T") && x.Code.Length == 2).Select(x => new BusStop
             {
                 Name = x.Code,
-                NodeId = x.Id,
-                Node = new Node
-                {
-                    Id = x.Id,
-                    Latitude = x.Latitude,
-                    Longtitude = x.Longtitude,
-                },
+                Latitude = x.Latitude,
+                Longtitude = x.Longtitude,
             }).ToList();
             await UOW.BusStopRepository.BulkMerge(BusStops);
 
-            NodeDAOs = NodeDAOs.Where(x => CalculateDistance(BusStops[3].Node, new Node { Latitude = x.Latitude, Longtitude = x.Longtitude }) < 2).ToList(); ;
+            NodeDAOs = NodeDAOs.Where(x => StaticParams.CalculateDistance(BusStops[3].Latitude, BusStops[3].Longtitude, x.Latitude, x.Longtitude) < 2).ToList(); ;
 
             List<CityFreighter> CityFreighter = NodeDAOs.Take(10).Select(x => new CityFreighter
             {
                 Name = x.Code,
-                NodeId = x.Id,
+                Capacity = 10,
+                Latitude = x.Latitude,
+                Longtitude = x.Longtitude,
             }).ToList();
             await UOW.CityFreighterRepository.BulkMerge(CityFreighter);
 
@@ -72,7 +69,8 @@ namespace RideSharing.Rpc
             {
                 Code = x.Code,
                 Name = x.Code,
-                NodeId = x.Id,
+                Latitude = x.Latitude,
+                Longtitude = x.Longtitude,
             }).ToList();
             await UOW.CustomerRepository.BulkMerge(Customer);
 
@@ -89,10 +87,6 @@ namespace RideSharing.Rpc
 
         private async Task InitEnum()
         {
-        }
-        private decimal CalculateDistance(Node start, Node destination)
-        {
-            return StaticParams.CalculateDistance(start.Latitude, start.Longtitude, destination.Latitude, destination.Longtitude);
         }
     }
 }

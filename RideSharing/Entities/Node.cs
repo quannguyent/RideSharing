@@ -27,6 +27,12 @@ namespace RideSharing.Entities
         {
             return base.GetHashCode();
         }
+        public Node() { }
+        public Node(decimal longtitude, decimal latitude)
+        {
+            Longtitude = longtitude;
+            Latitude = latitude;
+        }
     }
 
     public class NodeFilter : FilterEntity

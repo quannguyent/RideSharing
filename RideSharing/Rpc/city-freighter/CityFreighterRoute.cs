@@ -13,7 +13,6 @@ using OfficeOpenXml;
 using RideSharing.Entities;
 using RideSharing.Services.MCityFreighter;
 using System.ComponentModel;
-using RideSharing.Services.MNode;
 
 namespace RideSharing.Rpc.city_freighter
 {
@@ -36,9 +35,7 @@ namespace RideSharing.Rpc.city_freighter
         public const string ExportTemplate = Default + "/export-template";
         public const string BulkDelete = Default + "/bulk-delete";
         
-        public const string FilterListNode = Default + "/filter-list-node";
 
-        public const string SingleListNode = Default + "/single-list-node";
 
 
         public static Dictionary<string, long> Filters = new Dictionary<string, long>
@@ -46,14 +43,15 @@ namespace RideSharing.Rpc.city_freighter
             { "CityFreighterId", FieldTypeEnum.ID.Id },
             { nameof(CityFreighterFilter.Name), FieldTypeEnum.STRING.Id },
             { nameof(CityFreighterFilter.Capacity), FieldTypeEnum.DECIMAL.Id },
-            { nameof(CityFreighterFilter.NodeId), FieldTypeEnum.ID.Id },
+            { nameof(CityFreighterFilter.Latitude), FieldTypeEnum.DECIMAL.Id },
+            { nameof(CityFreighterFilter.Longtitude), FieldTypeEnum.DECIMAL.Id },
         };
 
         private static List<string> FilterList = new List<string> { 
-            FilterListNode,
+            
         };
         private static List<string> SingleList = new List<string> { 
-            SingleListNode, 
+            
         };
         private static List<string> CountList = new List<string> { 
             

@@ -13,12 +13,12 @@ namespace RideSharing.Models
         public long Id { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
-        public long NodeId { get; set; }
+        public decimal Latitude { get; set; }
+        public decimal Longtitude { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
 
-        public virtual NodeDAO Node { get; set; }
         public virtual ICollection<DeliveryOrderDAO> DeliveryOrders { get; set; }
     }
 }

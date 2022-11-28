@@ -13,8 +13,8 @@ namespace RideSharing.Rpc.city_freighter
         public long Id { get; set; }
         public string Name { get; set; }
         public decimal Capacity { get; set; }
-        public long NodeId { get; set; }
-        public CityFreighter_NodeDTO Node { get; set; }
+        public decimal Latitude { get; set; }
+        public decimal Longtitude { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public CityFreighter_CityFreighterExportDTO() {}
@@ -23,8 +23,8 @@ namespace RideSharing.Rpc.city_freighter
             this.Id = CityFreighter.Id;
             this.Name = CityFreighter.Name;
             this.Capacity = CityFreighter.Capacity;
-            this.NodeId = CityFreighter.NodeId;
-            this.Node = CityFreighter.Node == null ? null : new CityFreighter_NodeDTO(CityFreighter.Node);
+            this.Latitude = CityFreighter.Latitude;
+            this.Longtitude = CityFreighter.Longtitude;
             this.CreatedAt = CityFreighter.CreatedAt;
             this.UpdatedAt = CityFreighter.UpdatedAt;
             this.Informations = CityFreighter.Informations;

@@ -1,0 +1,16 @@
+{
+  "Server": {
+    "Id": {
+      "IdEmpty": "Chưa chọn @Id",
+      "IdNotExisted": "@Id không tồn tại"
+    },
+    "Data": {
+      "DataEmpty": "Chưa nhập @Data",
+      "DataOverLength": "Data quá dài"
+    },
+    "LastHeartbeat": {
+      "LastHeartbeatEmpty": "Chưa nhập @LastHeartbeat",
+      "LastHeartbeatInvalid": "@LastHeartbeat không hợp lệ"
+    }
+  }
+}

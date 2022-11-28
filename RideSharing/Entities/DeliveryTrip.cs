@@ -39,7 +39,7 @@ namespace RideSharing.Entities
         }
         public void BuildPath()
         {
-            Path = $"({BusStop.Node.Latitude}, {BusStop.Node.Longtitude})";
+            Path = $"({BusStop.Latitude}, {BusStop.Longtitude})";
             foreach (var Node in PlannedNode)
             {
                 Path += $"-> ({Node.Latitude}, {Node.Longtitude})";

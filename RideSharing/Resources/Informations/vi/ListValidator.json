@@ -1,0 +1,18 @@
+{
+  "List": {
+    "Id": {
+    },
+    "Key": {
+      "KeyEmpty": "Chưa nhập @Key",
+      "KeyOverLength": "Key quá dài"
+    },
+    "Value": {
+      "ValueEmpty": "Chưa nhập @Value",
+      "ValueOverLength": "Value quá dài"
+    },
+    "ExpireAt": {
+      "ExpireAtEmpty": "Chưa nhập @ExpireAt",
+      "ExpireAtInvalid": "@ExpireAt không hợp lệ"
+    }
+  }
+}

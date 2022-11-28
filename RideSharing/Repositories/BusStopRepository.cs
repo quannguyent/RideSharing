@@ -44,7 +44,8 @@ namespace RideSharing.Repositories
             query = query.Where(q => q.UpdatedAt, filter.UpdatedAt);
             query = query.Where(q => q.Id, filter.Id);
             query = query.Where(q => q.Name, filter.Name);
-            query = query.Where(q => q.NodeId, filter.NodeId);
+            query = query.Where(q => q.Latitude, filter.Latitude);
+            query = query.Where(q => q.Longtitude, filter.Longtitude);
             return query;
         }
 
@@ -58,7 +59,8 @@ namespace RideSharing.Repositories
                 IQueryable<BusStopDAO> queryable = query;
                 queryable = queryable.Where(q => q.Id, BusStopFilter.Id);
                 queryable = queryable.Where(q => q.Name, BusStopFilter.Name);
-                queryable = queryable.Where(q => q.NodeId, BusStopFilter.NodeId);
+                queryable = queryable.Where(q => q.Latitude, BusStopFilter.Latitude);
+                queryable = queryable.Where(q => q.Longtitude, BusStopFilter.Longtitude);
                 initQuery = initQuery.Union(queryable);
             }
             return initQuery;
@@ -77,8 +79,11 @@ namespace RideSharing.Repositories
                         case BusStopOrder.Name:
                             query = query.OrderBy(q => q.Name);
                             break;
-                        case BusStopOrder.Node:
-                            query = query.OrderBy(q => q.NodeId);
+                        case BusStopOrder.Latitude:
+                            query = query.OrderBy(q => q.Latitude);
+                            break;
+                        case BusStopOrder.Longtitude:
+                            query = query.OrderBy(q => q.Longtitude);
                             break;
                     }
                     break;
@@ -91,8 +96,11 @@ namespace RideSharing.Repositories
                         case BusStopOrder.Name:
                             query = query.OrderByDescending(q => q.Name);
                             break;
-                        case BusStopOrder.Node:
-                            query = query.OrderByDescending(q => q.NodeId);
+                        case BusStopOrder.Latitude:
+                            query = query.OrderByDescending(q => q.Latitude);
+                            break;
+                        case BusStopOrder.Longtitude:
+                            query = query.OrderByDescending(q => q.Longtitude);
                             break;
                     }
                     break;
@@ -107,14 +115,8 @@ namespace RideSharing.Repositories
             {
                 Id = filter.Selects.Contains(BusStopSelect.Id) ? q.Id : default(long),
                 Name = filter.Selects.Contains(BusStopSelect.Name) ? q.Name : default(string),
-                NodeId = filter.Selects.Contains(BusStopSelect.Node) ? q.NodeId : default(long),
-                Node = filter.Selects.Contains(BusStopSelect.Node) && q.Node != null ? new Node
-                {
-                    Id = q.Node.Id,
-                    Code = q.Node.Code,
-                    Longtitude = q.Node.Longtitude,
-                    Latitude = q.Node.Latitude,
-                } : null,
+                Latitude = filter.Selects.Contains(BusStopSelect.Latitude) ? q.Latitude : default(decimal),
+                Longtitude = filter.Selects.Contains(BusStopSelect.Longtitude) ? q.Longtitude : default(decimal),
                 CreatedAt = q.CreatedAt,
                 UpdatedAt = q.UpdatedAt,
                 DeletedAt = q.DeletedAt,
@@ -162,14 +164,8 @@ namespace RideSharing.Repositories
                 DeletedAt = x.DeletedAt,
                 Id = x.Id,
                 Name = x.Name,
-                NodeId = x.NodeId,
-                Node = x.Node == null ? null : new Node
-                {
-                    Id = x.Node.Id,
-                    Code = x.Node.Code,
-                    Longtitude = x.Node.Longtitude,
-                    Latitude = x.Node.Latitude,
-                },
+                Latitude = x.Latitude,
+                Longtitude = x.Longtitude,
             }).ToListAsync();
             
 
@@ -187,14 +183,8 @@ namespace RideSharing.Repositories
                 UpdatedAt = x.UpdatedAt,
                 Id = x.Id,
                 Name = x.Name,
-                NodeId = x.NodeId,
-                Node = x.Node == null ? null : new Node
-                {
-                    Id = x.Node.Id,
-                    Code = x.Node.Code,
-                    Longtitude = x.Node.Longtitude,
-                    Latitude = x.Node.Latitude,
-                },
+                Latitude = x.Latitude,
+                Longtitude = x.Longtitude,
             }).FirstOrDefaultAsync();
 
             if (BusStop == null)
@@ -207,7 +197,8 @@ namespace RideSharing.Repositories
             BusStopDAO BusStopDAO = new BusStopDAO();
             BusStopDAO.Id = BusStop.Id;
             BusStopDAO.Name = BusStop.Name;
-            BusStopDAO.NodeId = BusStop.NodeId;
+            BusStopDAO.Latitude = BusStop.Latitude;
+            BusStopDAO.Longtitude = BusStop.Longtitude;
             BusStopDAO.CreatedAt = StaticParams.DateTimeNow;
             BusStopDAO.UpdatedAt = StaticParams.DateTimeNow;
             DataContext.BusStop.Add(BusStopDAO);
@@ -226,7 +217,8 @@ namespace RideSharing.Repositories
                 return false;
             BusStopDAO.Id = BusStop.Id;
             BusStopDAO.Name = BusStop.Name;
-            BusStopDAO.NodeId = BusStop.NodeId;
+            BusStopDAO.Latitude = BusStop.Latitude;
+            BusStopDAO.Longtitude = BusStop.Longtitude;
             BusStopDAO.UpdatedAt = StaticParams.DateTimeNow;
             await DataContext.SaveChangesAsync();
             await SaveReference(BusStop);
@@ -269,7 +261,8 @@ namespace RideSharing.Repositories
                     Updates.Add(BusStopDAO);
                 }
                 BusStopDAO.Name = BusStop.Name;
-                BusStopDAO.NodeId = BusStop.NodeId;
+                BusStopDAO.Latitude = BusStop.Latitude;
+                BusStopDAO.Longtitude = BusStop.Longtitude;
                 BusStopDAO.UpdatedAt = StaticParams.DateTimeNow;
             }
             await DataContext.BusStop.BulkInsertAsync(Inserts);

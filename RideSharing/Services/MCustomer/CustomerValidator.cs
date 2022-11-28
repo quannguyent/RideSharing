@@ -42,7 +42,8 @@ namespace RideSharing.Services.MCustomer
         {
             await ValidateCode(Customer);
             await ValidateName(Customer);
-            await ValidateNode(Customer);
+            await ValidateLatitude(Customer);
+            await ValidateLongtitude(Customer);
             return Customer.IsValidated;
         }
 
@@ -52,7 +53,8 @@ namespace RideSharing.Services.MCustomer
             {
                 await ValidateCode(Customer);
                 await ValidateName(Customer);
-                await ValidateNode(Customer);
+                await ValidateLatitude(Customer);
+                await ValidateLongtitude(Customer);
             }
             return Customer.IsValidated;
         }
@@ -120,23 +122,12 @@ namespace RideSharing.Services.MCustomer
             }
             return Customer.IsValidated;
         }
-        private async Task<bool> ValidateNode(Customer Customer)
-        {       
-            if(Customer.NodeId == 0)
-            {
-                Customer.AddError(nameof(CustomerValidator), nameof(Customer.Node), CustomerMessage.Error.NodeEmpty, CustomerMessage);
-            }
-            else
-            {
-                int count = await UOW.NodeRepository.CountAll(new NodeFilter
-                {
-                    Id = new IdFilter{ Equal =  Customer.NodeId },
-                });
-                if(count == 0)
-                {
-                    Customer.AddError(nameof(CustomerValidator), nameof(Customer.Node), CustomerMessage.Error.NodeNotExisted, CustomerMessage);
-                }
-            }
+        private async Task<bool> ValidateLatitude(Customer Customer)
+        {   
+            return true;
+        }
+        private async Task<bool> ValidateLongtitude(Customer Customer)
+        {   
             return true;
         }
     }

@@ -1,0 +1,7 @@
+{
+  "Server": {
+      "Id": "@Id",
+      "Data": "@Data",
+      "LastHeartbeat": "@LastHeartbeat",
+  }
+}

@@ -27,5 +27,9 @@ namespace RideSharing.Handlers.Configuration
         public abstract Task Handle(string routingKey, string content);
 
         public abstract void QueueBind(IModel channel, string queue, string exchange);
+
+        protected void Log(Exception ex, string className, [CallerMemberName] string methodName = "")
+        {
+        }
     }
 }

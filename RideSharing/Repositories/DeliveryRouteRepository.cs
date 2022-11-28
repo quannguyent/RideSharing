@@ -131,7 +131,8 @@ namespace RideSharing.Repositories
                     Id = q.CityFreighter.Id,
                     Name = q.CityFreighter.Name,
                     Capacity = q.CityFreighter.Capacity,
-                    NodeId = q.CityFreighter.NodeId,
+                    Latitude = q.CityFreighter.Latitude,
+                    Longtitude = q.CityFreighter.Longtitude,
                 } : null,
                 CreatedAt = q.CreatedAt,
                 UpdatedAt = q.UpdatedAt,
@@ -188,7 +189,8 @@ namespace RideSharing.Repositories
                     Id = x.CityFreighter.Id,
                     Name = x.CityFreighter.Name,
                     Capacity = x.CityFreighter.Capacity,
-                    NodeId = x.CityFreighter.NodeId,
+                    Latitude = x.CityFreighter.Latitude,
+                    Longtitude = x.CityFreighter.Longtitude,
                 },
             }).ToListAsync();
             
@@ -215,7 +217,8 @@ namespace RideSharing.Repositories
                     Id = x.CityFreighter.Id,
                     Name = x.CityFreighter.Name,
                     Capacity = x.CityFreighter.Capacity,
-                    NodeId = x.CityFreighter.NodeId,
+                    Latitude = x.CityFreighter.Latitude,
+                    Longtitude = x.CityFreighter.Longtitude,
                 },
             }).FirstOrDefaultAsync();
 

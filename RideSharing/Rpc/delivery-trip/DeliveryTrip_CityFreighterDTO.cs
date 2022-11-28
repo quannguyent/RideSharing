@@ -12,7 +12,8 @@ namespace RideSharing.Rpc.delivery_trip
         public long Id { get; set; }
         public string Name { get; set; }
         public decimal Capacity { get; set; }
-        public long NodeId { get; set; }
+        public decimal Latitude { get; set; }
+        public decimal Longtitude { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public DeliveryTrip_CityFreighterDTO() {}
@@ -21,7 +22,8 @@ namespace RideSharing.Rpc.delivery_trip
             this.Id = CityFreighter.Id;
             this.Name = CityFreighter.Name;
             this.Capacity = CityFreighter.Capacity;
-            this.NodeId = CityFreighter.NodeId;
+            this.Latitude = CityFreighter.Latitude;
+            this.Longtitude = CityFreighter.Longtitude;
             this.CreatedAt = CityFreighter.CreatedAt;
             this.UpdatedAt = CityFreighter.UpdatedAt;
             this.Informations = CityFreighter.Informations;
@@ -35,7 +37,8 @@ namespace RideSharing.Rpc.delivery_trip
         public IdFilter Id { get; set; }
         public StringFilter Name { get; set; }
         public DecimalFilter Capacity { get; set; }
-        public IdFilter NodeId { get; set; }
+        public DecimalFilter Latitude { get; set; }
+        public DecimalFilter Longtitude { get; set; }
         public CityFreighterOrder OrderBy { get; set; }
     }
 }

@@ -130,14 +130,16 @@ namespace RideSharing.Repositories
                 {
                     Id = q.BusStop.Id,
                     Name = q.BusStop.Name,
-                    NodeId = q.BusStop.NodeId,
+                    Latitude = q.BusStop.Latitude,
+                    Longtitude = q.BusStop.Longtitude,
                 } : null,
                 CityFreighter = filter.Selects.Contains(DeliveryTripSelect.CityFreighter) && q.CityFreighter != null ? new CityFreighter
                 {
                     Id = q.CityFreighter.Id,
                     Name = q.CityFreighter.Name,
                     Capacity = q.CityFreighter.Capacity,
-                    NodeId = q.CityFreighter.NodeId,
+                    Latitude = q.CityFreighter.Latitude,
+                    Longtitude = q.CityFreighter.Longtitude,
                 } : null,
                 CreatedAt = q.CreatedAt,
                 UpdatedAt = q.UpdatedAt,
@@ -193,14 +195,16 @@ namespace RideSharing.Repositories
                 {
                     Id = x.BusStop.Id,
                     Name = x.BusStop.Name,
-                    NodeId = x.BusStop.NodeId,
+                    Latitude = x.BusStop.Latitude,
+                    Longtitude = x.BusStop.Longtitude,
                 },
                 CityFreighter = x.CityFreighter == null ? null : new CityFreighter
                 {
                     Id = x.CityFreighter.Id,
                     Name = x.CityFreighter.Name,
                     Capacity = x.CityFreighter.Capacity,
-                    NodeId = x.CityFreighter.NodeId,
+                    Latitude = x.CityFreighter.Latitude,
+                    Longtitude = x.CityFreighter.Longtitude,
                 },
             }).ToListAsync();
             
@@ -226,14 +230,16 @@ namespace RideSharing.Repositories
                 {
                     Id = x.BusStop.Id,
                     Name = x.BusStop.Name,
-                    NodeId = x.BusStop.NodeId,
+                    Latitude = x.BusStop.Latitude,
+                    Longtitude = x.BusStop.Longtitude,
                 },
                 CityFreighter = x.CityFreighter == null ? null : new CityFreighter
                 {
                     Id = x.CityFreighter.Id,
                     Name = x.CityFreighter.Name,
                     Capacity = x.CityFreighter.Capacity,
-                    NodeId = x.CityFreighter.NodeId,
+                    Latitude = x.CityFreighter.Latitude,
+                    Longtitude = x.CityFreighter.Longtitude,
                 },
             }).FirstOrDefaultAsync();
 

@@ -122,7 +122,8 @@ namespace RideSharing.Repositories
                     Id = q.Customer.Id,
                     Code = q.Customer.Code,
                     Name = q.Customer.Name,
-                    NodeId = q.Customer.NodeId,
+                    Latitude = q.Customer.Latitude,
+                    Longtitude = q.Customer.Longtitude,
                 } : null,
                 CreatedAt = q.CreatedAt,
                 UpdatedAt = q.UpdatedAt,
@@ -178,7 +179,8 @@ namespace RideSharing.Repositories
                     Id = x.Customer.Id,
                     Code = x.Customer.Code,
                     Name = x.Customer.Name,
-                    NodeId = x.Customer.NodeId,
+                    Latitude = x.Customer.Latitude,
+                    Longtitude = x.Customer.Longtitude,
                 },
             }).ToListAsync();
             
@@ -204,7 +206,8 @@ namespace RideSharing.Repositories
                     Id = x.Customer.Id,
                     Code = x.Customer.Code,
                     Name = x.Customer.Name,
-                    NodeId = x.Customer.NodeId,
+                    Latitude = x.Customer.Latitude,
+                    Longtitude = x.Customer.Longtitude,
                 },
             }).FirstOrDefaultAsync();
 

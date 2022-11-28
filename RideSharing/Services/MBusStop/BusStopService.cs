@@ -196,8 +196,10 @@ namespace RideSharing.Services.MBusStop
                         subFilter.Id = FilterBuilder.Merge(subFilter.Id, FilterPermissionDefinition.IdFilter);
                     if (FilterPermissionDefinition.Name == nameof(subFilter.Name))
                         subFilter.Name = FilterBuilder.Merge(subFilter.Name, FilterPermissionDefinition.StringFilter);
-                    if (FilterPermissionDefinition.Name == nameof(subFilter.NodeId))
-                        subFilter.NodeId = FilterBuilder.Merge(subFilter.NodeId, FilterPermissionDefinition.IdFilter);
+                    if (FilterPermissionDefinition.Name == nameof(subFilter.Latitude))
+                        subFilter.Latitude = FilterBuilder.Merge(subFilter.Latitude, FilterPermissionDefinition.DecimalFilter);
+                    if (FilterPermissionDefinition.Name == nameof(subFilter.Longtitude))
+                        subFilter.Longtitude = FilterBuilder.Merge(subFilter.Longtitude, FilterPermissionDefinition.DecimalFilter);
                     if (FilterPermissionDefinition.Name == nameof(CurrentContext.UserId) && FilterPermissionDefinition.IdFilter != null)
                     {
                         if (FilterPermissionDefinition.IdFilter.Equal.HasValue && FilterPermissionDefinition.IdFilter.Equal.Value == CurrentUserEnum.IS.Id)

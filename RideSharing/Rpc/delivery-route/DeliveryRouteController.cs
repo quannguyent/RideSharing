@@ -313,7 +313,8 @@ namespace RideSharing.Rpc.delivery_route
                 Id = DeliveryRoute_DeliveryRouteDTO.CityFreighter.Id,
                 Name = DeliveryRoute_DeliveryRouteDTO.CityFreighter.Name,
                 Capacity = DeliveryRoute_DeliveryRouteDTO.CityFreighter.Capacity,
-                NodeId = DeliveryRoute_DeliveryRouteDTO.CityFreighter.NodeId,
+                Latitude = DeliveryRoute_DeliveryRouteDTO.CityFreighter.Latitude,
+                Longtitude = DeliveryRoute_DeliveryRouteDTO.CityFreighter.Longtitude,
             };
             DeliveryRoute.BaseLanguage = CurrentContext.Language;
             return DeliveryRoute;

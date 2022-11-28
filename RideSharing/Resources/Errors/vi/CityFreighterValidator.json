@@ -8,11 +8,9 @@
     },
     "Capacity": {
     },
-    "NodeId": {
+    "Latitude": {
     },
-    "Node": {
-      "NodeEmpty": "Chưa chọn @Node",
-      "NodeNotExisted": "@Node không tồn tại"
+    "Longtitude": {
     }
   }
 }

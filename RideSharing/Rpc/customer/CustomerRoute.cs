@@ -13,7 +13,6 @@ using OfficeOpenXml;
 using RideSharing.Entities;
 using RideSharing.Services.MCustomer;
 using System.ComponentModel;
-using RideSharing.Services.MNode;
 
 namespace RideSharing.Rpc.customer
 {
@@ -36,9 +35,7 @@ namespace RideSharing.Rpc.customer
         public const string ExportTemplate = Default + "/export-template";
         public const string BulkDelete = Default + "/bulk-delete";
         
-        public const string FilterListNode = Default + "/filter-list-node";
 
-        public const string SingleListNode = Default + "/single-list-node";
 
 
         public static Dictionary<string, long> Filters = new Dictionary<string, long>
@@ -46,14 +43,15 @@ namespace RideSharing.Rpc.customer
             { "CustomerId", FieldTypeEnum.ID.Id },
             { nameof(CustomerFilter.Code), FieldTypeEnum.STRING.Id },
             { nameof(CustomerFilter.Name), FieldTypeEnum.STRING.Id },
-            { nameof(CustomerFilter.NodeId), FieldTypeEnum.ID.Id },
+            { nameof(CustomerFilter.Latitude), FieldTypeEnum.DECIMAL.Id },
+            { nameof(CustomerFilter.Longtitude), FieldTypeEnum.DECIMAL.Id },
         };
 
         private static List<string> FilterList = new List<string> { 
-            FilterListNode,
+            
         };
         private static List<string> SingleList = new List<string> { 
-            SingleListNode, 
+            
         };
         private static List<string> CountList = new List<string> { 
             

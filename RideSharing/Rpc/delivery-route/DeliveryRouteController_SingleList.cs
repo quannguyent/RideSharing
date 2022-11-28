@@ -33,7 +33,8 @@ namespace RideSharing.Rpc.delivery_route
             CityFreighterFilter.Id = DeliveryRoute_CityFreighterFilterDTO.Id;
             CityFreighterFilter.Name = DeliveryRoute_CityFreighterFilterDTO.Name;
             CityFreighterFilter.Capacity = DeliveryRoute_CityFreighterFilterDTO.Capacity;
-            CityFreighterFilter.NodeId = DeliveryRoute_CityFreighterFilterDTO.NodeId;
+            CityFreighterFilter.Latitude = DeliveryRoute_CityFreighterFilterDTO.Latitude;
+            CityFreighterFilter.Longtitude = DeliveryRoute_CityFreighterFilterDTO.Longtitude;
             List<CityFreighter> CityFreighters = await CityFreighterService.List(CityFreighterFilter);
             List<DeliveryRoute_CityFreighterDTO> DeliveryRoute_CityFreighterDTOs = CityFreighters
                 .Select(x => new DeliveryRoute_CityFreighterDTO(x)).ToList();

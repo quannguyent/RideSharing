@@ -42,7 +42,8 @@ namespace RideSharing.Services.MCityFreighter
         {
             await ValidateName(CityFreighter);
             await ValidateCapacity(CityFreighter);
-            await ValidateNode(CityFreighter);
+            await ValidateLatitude(CityFreighter);
+            await ValidateLongtitude(CityFreighter);
             return CityFreighter.IsValidated;
         }
 
@@ -52,7 +53,8 @@ namespace RideSharing.Services.MCityFreighter
             {
                 await ValidateName(CityFreighter);
                 await ValidateCapacity(CityFreighter);
-                await ValidateNode(CityFreighter);
+                await ValidateLatitude(CityFreighter);
+                await ValidateLongtitude(CityFreighter);
             }
             return CityFreighter.IsValidated;
         }
@@ -112,23 +114,12 @@ namespace RideSharing.Services.MCityFreighter
         {   
             return true;
         }
-        private async Task<bool> ValidateNode(CityFreighter CityFreighter)
-        {       
-            if(CityFreighter.NodeId == 0)
-            {
-                CityFreighter.AddError(nameof(CityFreighterValidator), nameof(CityFreighter.Node), CityFreighterMessage.Error.NodeEmpty, CityFreighterMessage);
-            }
-            else
-            {
-                int count = await UOW.NodeRepository.CountAll(new NodeFilter
-                {
-                    Id = new IdFilter{ Equal =  CityFreighter.NodeId },
-                });
-                if(count == 0)
-                {
-                    CityFreighter.AddError(nameof(CityFreighterValidator), nameof(CityFreighter.Node), CityFreighterMessage.Error.NodeNotExisted, CityFreighterMessage);
-                }
-            }
+        private async Task<bool> ValidateLatitude(CityFreighter CityFreighter)
+        {   
+            return true;
+        }
+        private async Task<bool> ValidateLongtitude(CityFreighter CityFreighter)
+        {   
             return true;
         }
     }

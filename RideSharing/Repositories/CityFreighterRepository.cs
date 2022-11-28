@@ -45,7 +45,8 @@ namespace RideSharing.Repositories
             query = query.Where(q => q.Id, filter.Id);
             query = query.Where(q => q.Name, filter.Name);
             query = query.Where(q => q.Capacity, filter.Capacity);
-            query = query.Where(q => q.NodeId, filter.NodeId);
+            query = query.Where(q => q.Latitude, filter.Latitude);
+            query = query.Where(q => q.Longtitude, filter.Longtitude);
             return query;
         }
 
@@ -60,7 +61,8 @@ namespace RideSharing.Repositories
                 queryable = queryable.Where(q => q.Id, CityFreighterFilter.Id);
                 queryable = queryable.Where(q => q.Name, CityFreighterFilter.Name);
                 queryable = queryable.Where(q => q.Capacity, CityFreighterFilter.Capacity);
-                queryable = queryable.Where(q => q.NodeId, CityFreighterFilter.NodeId);
+                queryable = queryable.Where(q => q.Latitude, CityFreighterFilter.Latitude);
+                queryable = queryable.Where(q => q.Longtitude, CityFreighterFilter.Longtitude);
                 initQuery = initQuery.Union(queryable);
             }
             return initQuery;
@@ -82,8 +84,11 @@ namespace RideSharing.Repositories
                         case CityFreighterOrder.Capacity:
                             query = query.OrderBy(q => q.Capacity);
                             break;
-                        case CityFreighterOrder.Node:
-                            query = query.OrderBy(q => q.NodeId);
+                        case CityFreighterOrder.Latitude:
+                            query = query.OrderBy(q => q.Latitude);
+                            break;
+                        case CityFreighterOrder.Longtitude:
+                            query = query.OrderBy(q => q.Longtitude);
                             break;
                     }
                     break;
@@ -99,8 +104,11 @@ namespace RideSharing.Repositories
                         case CityFreighterOrder.Capacity:
                             query = query.OrderByDescending(q => q.Capacity);
                             break;
-                        case CityFreighterOrder.Node:
-                            query = query.OrderByDescending(q => q.NodeId);
+                        case CityFreighterOrder.Latitude:
+                            query = query.OrderByDescending(q => q.Latitude);
+                            break;
+                        case CityFreighterOrder.Longtitude:
+                            query = query.OrderByDescending(q => q.Longtitude);
                             break;
                     }
                     break;
@@ -116,14 +124,8 @@ namespace RideSharing.Repositories
                 Id = filter.Selects.Contains(CityFreighterSelect.Id) ? q.Id : default(long),
                 Name = filter.Selects.Contains(CityFreighterSelect.Name) ? q.Name : default(string),
                 Capacity = filter.Selects.Contains(CityFreighterSelect.Capacity) ? q.Capacity : default(decimal),
-                NodeId = filter.Selects.Contains(CityFreighterSelect.Node) ? q.NodeId : default(long),
-                Node = filter.Selects.Contains(CityFreighterSelect.Node) && q.Node != null ? new Node
-                {
-                    Id = q.Node.Id,
-                    Code = q.Node.Code,
-                    Longtitude = q.Node.Longtitude,
-                    Latitude = q.Node.Latitude,
-                } : null,
+                Latitude = filter.Selects.Contains(CityFreighterSelect.Latitude) ? q.Latitude : default(decimal),
+                Longtitude = filter.Selects.Contains(CityFreighterSelect.Longtitude) ? q.Longtitude : default(decimal),
                 CreatedAt = q.CreatedAt,
                 UpdatedAt = q.UpdatedAt,
                 DeletedAt = q.DeletedAt,
@@ -172,14 +174,8 @@ namespace RideSharing.Repositories
                 Id = x.Id,
                 Name = x.Name,
                 Capacity = x.Capacity,
-                NodeId = x.NodeId,
-                Node = x.Node == null ? null : new Node
-                {
-                    Id = x.Node.Id,
-                    Code = x.Node.Code,
-                    Longtitude = x.Node.Longtitude,
-                    Latitude = x.Node.Latitude,
-                },
+                Latitude = x.Latitude,
+                Longtitude = x.Longtitude,
             }).ToListAsync();
             
 
@@ -198,14 +194,8 @@ namespace RideSharing.Repositories
                 Id = x.Id,
                 Name = x.Name,
                 Capacity = x.Capacity,
-                NodeId = x.NodeId,
-                Node = x.Node == null ? null : new Node
-                {
-                    Id = x.Node.Id,
-                    Code = x.Node.Code,
-                    Longtitude = x.Node.Longtitude,
-                    Latitude = x.Node.Latitude,
-                },
+                Latitude = x.Latitude,
+                Longtitude = x.Longtitude,
             }).FirstOrDefaultAsync();
 
             if (CityFreighter == null)
@@ -219,7 +209,8 @@ namespace RideSharing.Repositories
             CityFreighterDAO.Id = CityFreighter.Id;
             CityFreighterDAO.Name = CityFreighter.Name;
             CityFreighterDAO.Capacity = CityFreighter.Capacity;
-            CityFreighterDAO.NodeId = CityFreighter.NodeId;
+            CityFreighterDAO.Latitude = CityFreighter.Latitude;
+            CityFreighterDAO.Longtitude = CityFreighter.Longtitude;
             CityFreighterDAO.CreatedAt = StaticParams.DateTimeNow;
             CityFreighterDAO.UpdatedAt = StaticParams.DateTimeNow;
             DataContext.CityFreighter.Add(CityFreighterDAO);
@@ -239,7 +230,8 @@ namespace RideSharing.Repositories
             CityFreighterDAO.Id = CityFreighter.Id;
             CityFreighterDAO.Name = CityFreighter.Name;
             CityFreighterDAO.Capacity = CityFreighter.Capacity;
-            CityFreighterDAO.NodeId = CityFreighter.NodeId;
+            CityFreighterDAO.Latitude = CityFreighter.Latitude;
+            CityFreighterDAO.Longtitude = CityFreighter.Longtitude;
             CityFreighterDAO.UpdatedAt = StaticParams.DateTimeNow;
             await DataContext.SaveChangesAsync();
             await SaveReference(CityFreighter);
@@ -283,7 +275,8 @@ namespace RideSharing.Repositories
                 }
                 CityFreighterDAO.Name = CityFreighter.Name;
                 CityFreighterDAO.Capacity = CityFreighter.Capacity;
-                CityFreighterDAO.NodeId = CityFreighter.NodeId;
+                CityFreighterDAO.Latitude = CityFreighter.Latitude;
+                CityFreighterDAO.Longtitude = CityFreighter.Longtitude;
                 CityFreighterDAO.UpdatedAt = StaticParams.DateTimeNow;
             }
             await DataContext.CityFreighter.BulkInsertAsync(Inserts);
