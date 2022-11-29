@@ -32,6 +32,17 @@ namespace RideSharing.Entities
         {
             return base.GetHashCode();
         }
+        public Customer() { }
+        public Customer(Customer Customer)
+        {
+            this.Id = Customer.Id;
+            this.Code = Customer.Code;
+            this.Name = Customer.Name;
+            this.Latitude = Customer.Latitude;
+            this.Longtitude = Customer.Longtitude;
+            this.CreatedAt = Customer.CreatedAt;
+            this.UpdatedAt = Customer.UpdatedAt;
+        }
     }
 
     public class CustomerFilter : FilterEntity

@@ -41,7 +41,7 @@ namespace RideSharing.Rpc
             this.CurrentContext = CurrentContext;
         }
 
-        [HttpGet, Route("rpc/RideSharing/setup/init-data")]
+        [HttpGet, Route("rpc/ride-sharing/setup/init-data")]
         public async Task<ActionResult> InitData()
         {
             List<NodeDAO> NodeDAOs = await DataContext.Node.ToListAsync();
@@ -77,10 +77,19 @@ namespace RideSharing.Rpc
             return Ok();
         }
 
-        [HttpGet, Route("rpc/RideSharing/setup/init")]
+
+        [HttpGet, Route("rpc/ride-sharing/setup/init")]
         public async Task<ActionResult> Init()
         {
-            await InitEnum();
+            var NodeDAO = await DataContext.Node.ToListAsync();
+            NodeDAO.ForEach(x =>
+            {
+                var temp = x.Latitude;
+                x.Latitude = x.Longtitude;
+                x.Longtitude = temp;
+            });
+            await DataContext.BulkMergeAsync(NodeDAO);
+
             return Ok();
         }
 

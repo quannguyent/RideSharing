@@ -12,6 +12,7 @@ namespace RideSharing.Entities
         public long Id { get; set; }
         public string Code { get; set; }
         public decimal FreighterQuotientCost { get; set; }
+        public decimal FreighterCapacity { get; set; }
         public decimal DeliveryRadius { get; set; }
         public long DeliveryServiceDuration { get; set; }
         public DateTime CreatedAt { get; set; }

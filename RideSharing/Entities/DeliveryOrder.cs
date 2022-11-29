@@ -31,6 +31,17 @@ namespace RideSharing.Entities
         {
             return base.GetHashCode();
         }
+        public DeliveryOrder() { }
+        public DeliveryOrder(DeliveryOrder DeliveryOrder)
+        {
+            this.Id = DeliveryOrder.Id;
+            this.Code = DeliveryOrder.Code;
+            this.Weight = DeliveryOrder.Weight;
+            this.CustomerId = DeliveryOrder.CustomerId;
+            this.Customer = DeliveryOrder.Customer == null ? null : new Customer(DeliveryOrder.Customer);
+            this.CreatedAt = DeliveryOrder.CreatedAt;
+            this.UpdatedAt = DeliveryOrder.UpdatedAt;
+        }
     }
 
     public class DeliveryOrderFilter : FilterEntity

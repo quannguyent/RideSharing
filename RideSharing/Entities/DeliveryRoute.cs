@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using RideSharing.Common;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System.Linq;
 
 namespace RideSharing.Entities
 {
@@ -35,14 +36,19 @@ namespace RideSharing.Entities
         {
             return base.GetHashCode();
         }
-        public void BuildPath()
+        public DeliveryRoute() { }
+        public DeliveryRoute(DeliveryRoute DeliveryRoute) 
         {
-            Path = $"({CityFreighter.Latitude}, {CityFreighter.Longtitude})";
-            foreach (var trip in DeliveryTrips)
-            {
-                Path += $"-> {trip.Path}";
-            }
-            Path += $"({CityFreighter.Latitude}, {CityFreighter.Longtitude})";
+            this.Id = DeliveryRoute.Id;
+            this.Path = DeliveryRoute.Path;
+            this.CityFreighterId = DeliveryRoute.CityFreighterId;
+            this.TotalTravelDistance = DeliveryRoute.TotalTravelDistance;
+            this.TotalEmptyRunDistance = DeliveryRoute.TotalEmptyRunDistance;
+            this.CityFreighter = DeliveryRoute.CityFreighter == null ? null : new CityFreighter(DeliveryRoute.CityFreighter);
+            this.DeliveryOrders = DeliveryRoute.DeliveryOrders?.Select(x => new DeliveryOrder(x)).ToList();
+            this.DeliveryTrips = DeliveryRoute.DeliveryTrips?.Select(x => new DeliveryTrip(x)).ToList();
+            this.CreatedAt = DeliveryRoute.CreatedAt;
+            this.UpdatedAt = DeliveryRoute.UpdatedAt;
         }
     }
 

@@ -18,5 +18,13 @@ namespace RideSharing.Entities
             if (this.Destination.Equals(other.Destination)) return false;
             return true;
         }
+        public Edge() { }
+        public Edge(Edge Edge) 
+        {
+            this.Source = Edge.Source == null ? null : new Node(Edge.Source);
+            this.Destination = Edge.Destination == null ? null : new Node(Edge.Destination);
+            this.Distance = Edge.Distance;
+
+        }
     }
 }

@@ -17,8 +17,6 @@ namespace RideSharing.Entities
         public bool Equals(Node other)
         {
             if (other == null) return false;
-            if (this.Id != other.Id) return false;
-            if (this.Code != other.Code) return false;
             if (this.Longtitude != other.Longtitude) return false;
             if (this.Latitude != other.Latitude) return false;
             return true;
@@ -28,10 +26,15 @@ namespace RideSharing.Entities
             return base.GetHashCode();
         }
         public Node() { }
-        public Node(decimal longtitude, decimal latitude)
+        public Node(decimal latitude, decimal longtitude)
         {
-            Longtitude = longtitude;
-            Latitude = latitude;
+            this.Latitude = latitude;
+            this.Longtitude = longtitude;
+        }
+        public Node(Node Node)
+        {
+            this.Latitude = Node.Latitude;
+            this.Longtitude = Node.Longtitude;
         }
     }
 

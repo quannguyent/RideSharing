@@ -14,6 +14,8 @@ namespace RideSharing.Entities
         public decimal Capacity { get; set; }
         public decimal Latitude { get; set; }
         public decimal Longtitude { get; set; }
+        public decimal TotalTravelDistance { get; set; }
+        public decimal TotalEmptyRun { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
@@ -31,6 +33,15 @@ namespace RideSharing.Entities
         public override int GetHashCode()
         {
             return base.GetHashCode();
+        }
+        public CityFreighter() { }
+        public CityFreighter(CityFreighter CityFreighter) 
+        {
+            this.Id = CityFreighter.Id;
+            this.Name = CityFreighter.Name;
+            this.Capacity = CityFreighter.Capacity;
+            this.Latitude = CityFreighter.Latitude;
+            this.Longtitude = CityFreighter.Longtitude;
         }
     }
 

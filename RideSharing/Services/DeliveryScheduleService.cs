@@ -42,148 +42,177 @@ namespace RideSharing.Services
             foreach (CityFreighter CityFreighter in DeliverySchedule.CityFreighters)
             {
                 DeliveryRoute deliveryRoute = new DeliveryRoute();
+                deliveryRoute.CityFreighterId = CityFreighter.Id;
                 deliveryRoute.CityFreighter = CityFreighter;
                 deliveryRoute.DeliveryOrders = new List<DeliveryOrder>();
                 deliveryRoute.DeliveryTrips = new List<DeliveryTrip>();
-                deliveryRoute.BuildPath();
+                BuildPath(deliveryRoute);
                 DeliveryRoutes.Add(deliveryRoute);
             }
             foreach (DeliveryOrder DeliveryOrder in DeliverySchedule.DeliveryOrders)
             {
-                DeliveryRoutes = BestInsertion(DeliveryOrder, DeliverySchedule.DeliveryRoutes, DeliverySchedule.BusStops, DeliverySchedule.Config.FreighterQuotientCost);
+                DeliveryRoutes = BestInsertion(DeliveryOrder, DeliveryRoutes, DeliverySchedule.BusStops, DeliverySchedule.Config.FreighterQuotientCost);
             }
 
             DeliverySchedule.DeliveryRoutes = DeliveryRoutes;
             return DeliverySchedule;
         }
 
-        //public bool Repair(List<DeliveryOrder> DeliveryOrders)
-        //{
-        //    BestInsertion(DeliveryOrders);
-        //    return true;
-        //}
-
         public List<DeliveryRoute> BestInsertion(DeliveryOrder DeliveryOrder, List<DeliveryRoute> DeliveryRoutes, List<BusStop> BusStops, decimal FreighterQuotientCost)
         {
             decimal MinimumCost = int.MaxValue;
             var BestInsertion = new List<DeliveryRoute>();
 
-            //Insert initial deport
             foreach (DeliveryRoute DeliveryRoute in DeliveryRoutes)
             {
-                var newDeliveryRoutes = DeliveryRoutes;
-                newDeliveryRoutes.Remove(DeliveryRoute);
-                newDeliveryRoutes.Add(InsertNewTrip(DeliveryOrder, DeliveryRoute, BusStops, true));
-                var cost = EvaluateTotalCost(newDeliveryRoutes, FreighterQuotientCost);
-                if (cost < MinimumCost)
+                var DeliveryOrderNode = new Node(DeliveryOrder.Customer.Latitude, DeliveryOrder.Customer.Longtitude);
+
+                foreach (var BusStop in BusStops)
                 {
-                    MinimumCost = cost;
-                    BestInsertion = newDeliveryRoutes;
+                    //Insert to initial deport
+                    var BusStopNode = new Node(BusStop.Latitude, BusStop.Longtitude);
+
+                    var preDeliveryRoutes = DeliveryRoutes.ToList();
+                    DeliveryRoute preDeliveryRoute = preDeliveryRoutes
+                        .Where(x => x.CityFreighterId == DeliveryRoute.CityFreighterId)
+                        .Select(x => new DeliveryRoute(x))
+                        .FirstOrDefault();
+
+                    DeliveryTrip DeliveryTrip = new DeliveryTrip
+                    {
+                        BusStopId = BusStop.Id,
+                        BusStop = BusStop,
+                        PlannedNode = new List<Node>() {
+                            BusStopNode,
+                            DeliveryOrderNode
+                        },
+                        DeliveryOrders = new List<DeliveryOrder>() { DeliveryOrder },
+                    };
+
+                    var insertIndex = 0;
+                    preDeliveryRoute.DeliveryTrips.Insert(insertIndex, DeliveryTrip);
+                    BuildPath(preDeliveryRoute);
+
+                    preDeliveryRoutes.Remove(DeliveryRoute);
+                    preDeliveryRoutes.Add(preDeliveryRoute);
+
+                    var TotalCost = EvaluateTotalCost(preDeliveryRoutes, FreighterQuotientCost);
+                    if (TotalCost < MinimumCost)
+                    {
+                        MinimumCost = TotalCost;
+                        BestInsertion = preDeliveryRoutes;
+                    }
+                }
+
+                //Insert to existed trip
+                foreach (DeliveryTrip DeliveryTrip in DeliveryRoute.DeliveryTrips)
+                {
+                    var inDeliveryRoutes = DeliveryRoutes.ToList();
+                    var inDeliveryRoute = inDeliveryRoutes
+                        .Where(x => x.CityFreighterId == DeliveryRoute.CityFreighterId)
+                        .Select(x => new DeliveryRoute(x))
+                        .FirstOrDefault();
+
+                    decimal minimumTripDistance = int.MaxValue;
+                    var minimumDeliveryTrip = inDeliveryRoute.DeliveryTrips.Where(x => x.Equals(DeliveryTrip)).FirstOrDefault();
+
+                    foreach (Node Node in DeliveryTrip.PlannedNode)
+                    {
+                        var inDeliveryTrip = inDeliveryRoute.DeliveryTrips
+                            .Where(x => x.Equals(DeliveryTrip))
+                            .Select(x => new DeliveryTrip(x))
+                            .FirstOrDefault();
+
+                        var inPlannedNode = inDeliveryTrip.PlannedNode.ToList();
+                        var insertIndex = inPlannedNode.IndexOf(Node);
+                        inPlannedNode.Insert(insertIndex, DeliveryOrderNode);
+
+                        inDeliveryTrip.PlannedNode = inPlannedNode;
+                        inDeliveryTrip.DeliveryOrders.Add(DeliveryOrder);
+                        BuildPath(inDeliveryTrip);
+
+                        if (inDeliveryTrip.TravelDistance < minimumTripDistance)
+                        {
+                            minimumTripDistance = inDeliveryTrip.TravelDistance;
+                            minimumDeliveryTrip = inDeliveryTrip;
+                        }
+                    }
+
+                    BuildPath(DeliveryRoute);
+                    var TotalCost = EvaluateTotalCost(inDeliveryRoutes, FreighterQuotientCost);
+                    if (TotalCost < MinimumCost)
+                    {
+                        MinimumCost = TotalCost; ;
+                        BestInsertion = inDeliveryRoutes;
+                    }
                 }
             }
 
-            ////Insert to existed trip
+            ////Insert to last deport
             //foreach (DeliveryRoute DeliveryRoute in DeliveryRoutes)
             //{
-            //    var newDeliveryRoutes = DeliveryRoutes;
+            //    var newDeliveryRoutes = DeliveryRoutes.ToList();
             //    newDeliveryRoutes.Remove(DeliveryRoute);
             //    newDeliveryRoutes.Add(InsertNewTrip(DeliveryOrder, DeliveryRoute, BusStops));
-            //    var cost = EvaluateTotalCost(newDeliveryRoutes);
+            //    var cost = EvaluateTotalCost(newDeliveryRoutes, FreighterQuotientCost);
             //    if (cost < MinimumCost)
             //    {
             //        MinimumCost = cost;
             //        BestInsertion = newDeliveryRoutes;
             //    }
             //}
-
-            //Insert to last deport
-            foreach (DeliveryRoute DeliveryRoute in DeliveryRoutes)
-            {
-                var newDeliveryRoutes = DeliveryRoutes;
-                newDeliveryRoutes.Remove(DeliveryRoute);
-                newDeliveryRoutes.Add(InsertNewTrip(DeliveryOrder, DeliveryRoute, BusStops));
-                var cost = EvaluateTotalCost(newDeliveryRoutes, FreighterQuotientCost);
-                if (cost < MinimumCost)
-                {
-                    MinimumCost = cost;
-                    BestInsertion = newDeliveryRoutes;
-                }
-            }
-            return DeliveryRoutes;
+            return BestInsertion;
         }
 
         public decimal EvaluateTotalCost(List<DeliveryRoute> DeliveryRoutes, decimal FreighterQuotientCost)
         {
             var TotalTravelDistance = DeliveryRoutes.Sum(x => x.TotalTravelDistance);
-            var CityFreighterCount = DeliveryRoutes.Select(x => x.CityFreighterId).Distinct().Count();
-            var TotalCost = CityFreighterCount * (CityFreighterCount * (CityFreighterCount - 1) * FreighterQuotientCost / 2);
+            var CityFreighterCount = DeliveryRoutes.Where(x => x.TotalTravelDistance > 0).Select(x => x.CityFreighterId).Distinct().Count();
+            var TotalCost = TotalTravelDistance + (CityFreighterCount * (CityFreighterCount - 1) * FreighterQuotientCost / 2);
             return TotalCost;
         }
-        public decimal CalculateDistance(Node start, Node destination)
+
+        private void BuildPath(DeliveryTrip DeliveryTrip)
         {
-            return StaticParams.CalculateDistance(start.Latitude, start.Longtitude, destination.Latitude, destination.Longtitude);
-        }
-        public decimal CalculateTotalDistance(DeliveryRoute DeliveryRoute)
-        {
-            var LastLocation = new Node(DeliveryRoute.CityFreighter.Latitude, DeliveryRoute.CityFreighter.Longtitude);
-            foreach (DeliveryTrip DeliveryTrip in DeliveryRoute.DeliveryTrips)
+            Node previousNode = new Node(DeliveryTrip.BusStop.Latitude, DeliveryTrip.BusStop.Longtitude);
+            string Path = $"({DeliveryTrip.BusStop.Latitude}, {DeliveryTrip.BusStop.Longtitude})";
+            decimal TravelDistance = 0;
+            foreach (Node Node in DeliveryTrip.PlannedNode)
             {
-                var FirstNode = DeliveryTrip.PlannedNode.FirstOrDefault();
-                var Distance = StaticParams.CalculateDistance(LastLocation.Latitude, LastLocation.Latitude,
-                    FirstNode.Latitude, FirstNode.Longtitude);
-                DeliveryRoute.TotalEmptyRunDistance += Distance;
-                DeliveryRoute.TotalTravelDistance += Distance;
-                LastLocation = DeliveryTrip.PlannedNode.LastOrDefault();
+                Path += $"-> ({Node.Latitude}, {Node.Longtitude})";
+                TravelDistance += StaticParams.CalculateDistance(previousNode.Latitude, previousNode.Longtitude,
+                    Node.Latitude, Node.Longtitude);
+                previousNode = Node;
             }
-            return DeliveryRoute.TotalTravelDistance;
+            DeliveryTrip.Path = Path;
+            DeliveryTrip.TravelDistance = TravelDistance;
+            return;
         }
 
-        public DeliveryRoute InsertNewTrip(DeliveryOrder DeliveryOrder, DeliveryRoute DeliveryRoute, List<BusStop> BusStops, bool toFirst = false)
+        private void BuildPath(DeliveryRoute DeliveryRoute)
         {
-            decimal BestTotalTravelDistance = 0;
-            var BestInsertion = new DeliveryRoute();
+            DeliveryRoute.DeliveryTrips.ForEach(x => BuildPath(x));
+            var Path = $"({DeliveryRoute.CityFreighter.Latitude}, {DeliveryRoute.CityFreighter.Longtitude})";
+            var previousNode = new Node(DeliveryRoute.CityFreighter.Latitude, DeliveryRoute.CityFreighter.Longtitude);
+            decimal TravelDistance = 0;
+            decimal TotalEmptyRun = 0;
 
-            foreach (BusStop BusStop in BusStops)
+            foreach (var trip in DeliveryRoute.DeliveryTrips)
             {
-                var newDeliveryRoute = DeliveryRoute;
-                var Distance = StaticParams.CalculateDistance(BusStop.Latitude, BusStop.Latitude,
-                    DeliveryOrder.Customer.Latitude, DeliveryOrder.Customer.Longtitude);
-                DeliveryTrip DeliveryTrip = new DeliveryTrip
-                {
-                    BusStopId = BusStop.Id,
-                    BusStop = BusStop,
-                    PlannedNode = new List<Node>() {
-                        new Node(BusStop.Latitude, BusStop.Latitude),
-                        new Node(DeliveryOrder.Customer.Latitude, DeliveryOrder.Customer.Longtitude)
-                    },
-                    DeliveryOrders = new List<DeliveryOrder>() { DeliveryOrder },
-                    PlannedRoute = new List<Edge>()
-                    {
-                        new Edge
-                        {
-                            Source = new Node(BusStop.Latitude, BusStop.Latitude),
-                            Destination = new Node(DeliveryOrder.Customer.Latitude, DeliveryOrder.Customer.Longtitude),
-                            Distance = Distance,
-                        }
-                    },
-                    TravelDistance = Distance,
-                };
-                DeliveryTrip.BuildPath();
-                if (toFirst)
-                {
-                    newDeliveryRoute.DeliveryTrips.Insert(0, DeliveryTrip);
-                }
-                newDeliveryRoute.DeliveryTrips.Add(DeliveryTrip);
-
-                var totalTravelDistance = CalculateTotalDistance(DeliveryRoute);
-                if (totalTravelDistance >= BestTotalTravelDistance)
-                {
-                    BestTotalTravelDistance = totalTravelDistance;
-                    BestInsertion = newDeliveryRoute;
-                }
-
+                Path += $"-> {trip.Path}";
+                decimal DistanceFromPrevious = StaticParams.CalculateDistance(previousNode.Latitude, previousNode.Longtitude,
+                    trip.PlannedNode.FirstOrDefault().Latitude, trip.PlannedNode.FirstOrDefault().Longtitude);
+                TotalEmptyRun += DistanceFromPrevious;
+                TravelDistance += DistanceFromPrevious + trip.TravelDistance;
+                previousNode = trip.PlannedNode.LastOrDefault();
             }
-            return BestInsertion;
+            Path += $"({DeliveryRoute.CityFreighter.Latitude}, {DeliveryRoute.CityFreighter.Longtitude})";
+            TravelDistance += StaticParams.CalculateDistance(previousNode.Latitude, previousNode.Longtitude,
+                    DeliveryRoute.CityFreighter.Latitude, DeliveryRoute.CityFreighter.Longtitude);
+
+            DeliveryRoute.Path = Path;
+            DeliveryRoute.TotalTravelDistance = TravelDistance;
+            DeliveryRoute.TotalEmptyRunDistance = TotalEmptyRun;
         }
 
         public async Task<DeliverySchedule> GetDeliverySchedule(DeliverySchedule DeliverySchedule)
@@ -202,9 +231,48 @@ namespace RideSharing.Services
                 Selects = CityFreighterSelect.ALL,
             });
 
-            InitRoute(DeliverySchedule);
+            var Customers = await UOW.CustomerRepository.List(new CustomerFilter
+            {
+                Take = 20,
+                Skip = 0,
+                Selects = CustomerSelect.ALL,
+            });
 
+            DeliverySchedule.DeliveryOrders = Customers.Select(x => new DeliveryOrder
+            {
+                Code = $"Order_{x.Code}",
+                Weight = 2,
+                CustomerId = x.Id,
+                Customer = x,
+            }).ToList();
+
+            InitRoute(DeliverySchedule);
+            EvaluateDeliverySchedule(DeliverySchedule);
             return DeliverySchedule;
+        }
+
+        private void EvaluateDeliverySchedule(DeliverySchedule DeliverySchedule)
+        {
+            DeliverySchedule.TotalCost = EvaluateTotalCost(DeliverySchedule.DeliveryRoutes, DeliverySchedule.Config.FreighterQuotientCost);
+            DeliverySchedule.TotalTravelDistance = DeliverySchedule.DeliveryRoutes.Sum(x => x.TotalTravelDistance);
+            DeliverySchedule.TotalEmptyRun = DeliverySchedule.DeliveryRoutes.Sum(x => x.TotalEmptyRunDistance);
+            DeliverySchedule.NumberOfFreigther = DeliverySchedule.DeliveryRoutes.Where(x => x.TotalTravelDistance > 0).Select(x => x.CityFreighterId).Distinct().Count();
+            DeliverySchedule.NumberOfTrip = DeliverySchedule.DeliveryRoutes.Sum(x => x.DeliveryTrips.Count());
+
+            List<DeliveryTrip> DeliveryTrips = DeliverySchedule.DeliveryRoutes.SelectMany(x => x.DeliveryTrips).ToList();
+            foreach (BusStop BusStop in DeliverySchedule.BusStops)
+            {
+                BusStop.NumberOfUsed = DeliveryTrips.Count(x => x.BusStopId == BusStop.Id);
+            }
+            foreach (CityFreighter CityFreighter in DeliverySchedule.CityFreighters)
+            {
+                CityFreighter.TotalTravelDistance = DeliverySchedule.DeliveryRoutes
+                    .Where(x => x.CityFreighterId == CityFreighter.Id)
+                    .Sum(x => x.TotalTravelDistance);
+                CityFreighter.TotalEmptyRun = DeliverySchedule.DeliveryRoutes
+                    .Where(x => x.CityFreighterId == CityFreighter.Id)
+                    .Sum(x => x.TotalEmptyRunDistance);
+            }
         }
     }
 }

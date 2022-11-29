@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using RideSharing.Common;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System.Linq;
 
 namespace RideSharing.Entities
 {
@@ -30,20 +31,27 @@ namespace RideSharing.Entities
             if (this.Path != other.Path) return false;
             if (this.CityFreighterId != other.CityFreighterId) return false;
             if (this.BusStopId != other.BusStopId) return false;
-            if (this.TravelDistance != other.TravelDistance) return false;
             return true;
         }
         public override int GetHashCode()
         {
             return base.GetHashCode();
         }
-        public void BuildPath()
+        public DeliveryTrip() { }
+        public DeliveryTrip(DeliveryTrip DeliveryTrip)
         {
-            Path = $"({BusStop.Latitude}, {BusStop.Longtitude})";
-            foreach (var Node in PlannedNode)
-            {
-                Path += $"-> ({Node.Latitude}, {Node.Longtitude})";
-            }
+            this.Id = DeliveryTrip.Id;
+            this.Path = DeliveryTrip.Path;
+            this.CityFreighterId = DeliveryTrip.CityFreighterId;
+            this.BusStopId = DeliveryTrip.BusStopId;
+            this.TravelDistance = DeliveryTrip.TravelDistance;
+            this.BusStop = DeliveryTrip.BusStop == null ? null : new BusStop(DeliveryTrip.BusStop);
+            this.CityFreighter = DeliveryTrip.CityFreighter == null ? null : new CityFreighter(DeliveryTrip.CityFreighter);
+            this.DeliveryOrders = DeliveryTrip.DeliveryOrders?.Select(x => new DeliveryOrder(x)).ToList();
+            this.PlannedNode = DeliveryTrip.PlannedNode?.Select(x => new Node(x)).ToList();
+            this.PlannedRoute = DeliveryTrip.PlannedRoute?.Select(x => new Edge(x)).ToList();
+            this.CreatedAt = DeliveryTrip.CreatedAt;
+            this.UpdatedAt = DeliveryTrip.UpdatedAt;
         }
     }
 

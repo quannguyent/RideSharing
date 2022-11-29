@@ -14,7 +14,7 @@ namespace RideSharing.Rpc
 {
     public class Root
     {
-        protected const string Module = "rideSharing";
+        protected const string Module = "ride-sharing";
         protected const string Rpc = "rpc/";
         protected const string Rest = "rest/";
     }

@@ -11,6 +11,7 @@ namespace RideSharing.Entities
     {
         public long Id { get; set; }
         public string Name { get; set; }
+        public long NumberOfUsed { get; set; }
         public decimal Latitude { get; set; }
         public decimal Longtitude { get; set; }
         public DateTime CreatedAt { get; set; }
@@ -29,6 +30,17 @@ namespace RideSharing.Entities
         public override int GetHashCode()
         {
             return base.GetHashCode();
+        }
+        public BusStop() { }
+        public BusStop(BusStop BusStop)
+        {
+            this.Id = BusStop.Id;
+            this.NumberOfUsed = BusStop.NumberOfUsed;
+            this.Name = BusStop.Name;
+            this.Latitude = BusStop.Latitude;
+            this.Longtitude = BusStop.Longtitude;
+            this.CreatedAt = BusStop.CreatedAt;
+            this.UpdatedAt = BusStop.UpdatedAt;
         }
     }
 
